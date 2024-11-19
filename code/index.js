@@ -1,55 +1,13 @@
-class Cell {
-  queued = false;
-  value;
-
-  constructor(value = 0) {
-    this.value = value;
-  }
-}
-
+import {Cell} from './classes/Cell.js';
+import {bfs} from './algorithms/bfs.js';
 
 const maze = [
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()],
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()],
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()],
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()],
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()],
-    [new Cell(), new Cell(), new Cell(), new Cell(), new Cell(), new Cell()]
+    [new Cell(0,0), new Cell(0,1), new Cell(0,2), new Cell(0,3), new Cell(0,4), new Cell(0,5)],
+    [new Cell(1,0), new Cell(1,1), new Cell(1,2), new Cell(1,3), new Cell(1,4), new Cell(1,5)],
+    [new Cell(2,0), new Cell(2,1), new Cell(2,2), new Cell(2,3), new Cell(2,4), new Cell(2,5)],
+    [new Cell(3,0), new Cell(3,1), new Cell(3,2), new Cell(3,3), new Cell(3,4), new Cell(3,5)],
+    [new Cell(4,0), new Cell(4,1), new Cell(4,2), new Cell(4,3), new Cell(4,4), new Cell(4,5)],
+    [new Cell(5,0), new Cell(5,1), new Cell(5,2), new Cell(5,3), new Cell(5,4), new Cell(5,5)]
 ];
 
 bfs(maze);
-
-function bfs(maze) {
-    const queue = [];
-    const randomRow = Math.floor(Math.random() * maze.length);
-    const randomCol = Math.floor(Math.random() * maze[0].length);
-    queue.push([randomRow, randomCol]);
-    while (queue.length > 0) {
-      let [x, y] = queue.shift();
-      while (maze[x][y] == 1) {
-        [x, y] = queue.shift();
-      }
-      
-      maze[x][y] = 1;
-
-      if (x > 0 && maze[x - 1][y] == 0){
-          queue.push([x - 1, y]);
-      }
-      if (y < maze[0].length - 1 && maze[x][y + 1] == 0){
-          queue.push([x, y + 1]);
-      }
-      if (x < maze.length - 1 && maze[x + 1][y] == 0){
-          queue.push([x + 1, y]);
-      }
-      if (y > 0 && maze[x][y - 1] == 0){
-          queue.push([x, y - 1]);
-      }
-
-      console.log("==============")
-      for (const row of maze) {
-        console.log(row);
-      }
-      console.log("==============")
-    }
-}
-
