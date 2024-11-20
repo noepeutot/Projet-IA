@@ -1,5 +1,6 @@
 import {Cell} from './classes/Cell.js';
 import {bfs} from './algorithms/bfs.js';
+import {dfs} from './algorithms/dfs.js';
 
 const maze = [
     [new Cell(0,0), new Cell(0,1), new Cell(0,2), new Cell(0,3), new Cell(0,4), new Cell(0,5)],
@@ -10,4 +11,12 @@ const maze = [
     [new Cell(5,0), new Cell(5,1), new Cell(5,2), new Cell(5,3), new Cell(5,4), new Cell(5,5)]
 ];
 
-bfs(maze);
+// console.log("-- BFS --")
+// console.log("==============")
+// bfs(maze);
+// console.log("")
+
+console.log("-- DFS --")
+console.log("==============")
+dfs(maze)
+console.log("")
