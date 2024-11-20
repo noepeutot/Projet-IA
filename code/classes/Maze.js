@@ -1,16 +1,18 @@
-export default
+import {Cell} from './Cell.js';
 
-class Maze {
+export class Maze {
     constructor(width, height) {
         this.width = width;
         this.height = height;
         this.grid = this.createGrid();
         this.stack = [];
-        this.currentCell = this.grid[0][0];
-        this.currentCell.x = 0;
-        this.currentCell.y = 0;
+        this.currentCell = this.grid[this.getRandomInt(width)][this.getRandomInt(height)];
         this.visitedCells = 0;
         this.totalCells = width * height;
+    }
+
+    getRandomInt(max) {
+        return Math.floor(Math.random() * max);
     }
 
     createGrid() {
@@ -18,10 +20,9 @@ class Maze {
         for (let y = 0; y < this.height; y++) {
             const row = [];
             for (let x = 0; x < this.width; x++) {
-                row.push({
-                    visited: false,
-                    walls: { top: true, right: true, bottom: true, left: true }
-                });
+                row.push(
+                    new Cell(x, y)
+                );
             }
             grid.push(row);
         }
