@@ -11,10 +11,6 @@ export class Maze {
         this.totalCells = width * height;
     }
 
-    getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
-
     createGrid() {
         const grid = [];
         for (let y = 0; y < this.height; y++) {
@@ -95,6 +91,10 @@ export class Maze {
         }
     }
 
+    getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+
     displayMaze() {
         for (let y = 0; y < this.height; y++) {
             let topLine = '';
@@ -109,12 +109,3 @@ export class Maze {
         console.log('+---'.repeat(this.width) + '+');
     }
 }
-
-//TODO : Tests à supprimer
-const maze = new Maze(10, 10);
-console.log('Defaut maze');
-console.log(maze.grid);
-
-maze.generateMaze();
-console.log('Generated maze');
-maze.displayMaze();

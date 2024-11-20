@@ -10,16 +10,12 @@ export class Cell {
     this.value = value;
     this.x = x;
     this.y = y;
-    this.walls = { top: true, right: true, bottom: true, left: true }
+    this.walls = { top: true, right: true, bottom: true, left: true };
     this.visited = false;
   }
 
   isQueued() {
     return this.queued;
-  }
-
-  setVisited(bool) {
-    this.visited = bool;
   }
 }
 
