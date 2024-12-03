@@ -17,5 +17,13 @@ export class Cell {
   isQueued() {
     return this.queued;
   }
+
+  isEntry(entryCell) {
+    return this === entryCell;
+  }
+
+  isExit(exitCell) {
+    return this === exitCell;
+  }
 }
 
