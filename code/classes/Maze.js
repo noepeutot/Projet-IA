@@ -33,7 +33,7 @@ export class Maze {
     }
 
     /**
-     * Génère le labyrinthe
+     * Génère le labyrinthe en utilisant l'algorithme de recursive backtracking
      */
     generateMaze() {
         // Marque la cellule courante comme visitée
