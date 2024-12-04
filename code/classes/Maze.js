@@ -9,8 +9,8 @@ export class Maze {
         this.currentCell = this.grid[this.getRandomInt(width)][this.getRandomInt(height)];
         this.visitedCells = 0;
         this.totalCells = width * height;
-        this.entry = this.grid[0][0];
-        this.exit = this.grid[height - 1][width - 1];
+        this.setStartCell(this.grid[0][0]);
+        this.setEndCell(this.grid[height - 1][width - 1]);
         this.generateMaze();
     }
 
@@ -30,6 +30,40 @@ export class Maze {
             grid.push(row);
         }
         return grid;
+    }
+
+    /**
+     * Obtient la cellule de départ
+     * @returns {Cell}
+     */
+    getStartCell() {
+        return this.start;
+    }
+
+    /**
+     * Obtient la cellule de fin
+     * @returns {Cell}
+     */
+    getEndCell() {
+        return this.end;
+    }
+
+    /**
+     * Définit la cellule de départ
+     * @param {Cell} cell 
+     */
+    setStartCell(cell) {
+        this.start = cell;
+        cell.setType("start");
+    }
+
+    /**
+     * Définit la cellule de fin
+     * @param {Cell} cell 
+     */
+    setEndCell(cell) {
+        this.end = cell;
+        cell.setType("end");
     }
 
     /**
@@ -58,6 +92,9 @@ export class Maze {
                 this.currentCell = this.stack.pop();
             }
         }
+
+        // Réinitialise les cellules visitées
+        this.resetVisitedCells();
     }
 
     /**
@@ -141,6 +178,17 @@ export class Maze {
     getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
+    
+
+    /**
+     * Réinitialise les cellules visitées
+     */
+    resetVisitedCells() {
+        this.visitedCells = 0;
+        this.grid.forEach(row => {
+            row.forEach(cell => cell.setVisited(false));
+        });
+    }
 
     /**
      * Affiche le labyrinthe
@@ -152,9 +200,9 @@ export class Maze {
             for (let x = 0; x < this.width; x++) {
                 const cell = this.grid[y][x];
                 topLine += cell.walls.top ? '+---' : '+   ';
-                if (cell === this.entry) {
+                if (cell === this.getStartCell()) {
                     middleLine += cell.walls.left ? '| E ' : '  E ';
-                } else if (cell === this.exit) {
+                } else if (cell === this.getEndCell()) {
                     middleLine += cell.walls.left ? '| S ' : '  S ';
                 } else {
                     middleLine += cell.walls.left ? '|   ' : '    ';
