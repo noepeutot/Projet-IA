@@ -1,5 +1,6 @@
 export class Cell {
   queued = false;
+  visited = false;
   value;
   x;
   y;

@@ -1,16 +1,50 @@
 export function aStar(maze) {
-    // Sélection de coordonnées d'une cellule de départ aléatoirement, située en bordure
-    const randomRowStart = Math.floor(Math.random() * maze.length);
-    let randomColStart = Math.floor(Math.random() * maze[0].length);
+    // Sélection de coordonnées d'une cellule de départ et d'arrivée aléatoirement, située en bordure
+    const yStart = Math.floor(Math.random() * maze.length);
+    let xStart = Math.floor(Math.random() * maze[0].length);
 
-    let randomRowEnd, randomColEnd
+    let yEnd, xEnd
 
-    if (randomRowStart > 0 || randomRowStart < maze.length - 1) {
-      randomColStart = randomColStart <= 0.5 ? 0 : maze[0].length - 1;
-      randomColEnd = randomColStart == 0 ? maze[0].length - 1 : 0;
-      randomRowEnd = Math.floor(Math.random() * maze.length);
+    if (yStart > 0 || yStart < maze.length - 1) {
+      xStart = xStart <= 0.5 ? 0 : maze[0].length - 1;
+      xEnd = xStart == 0 ? maze[0].length - 1 : 0;
+      yEnd = Math.floor(Math.random() * maze.length);
     } else {
-      randomRowEnd = randomRowStart == 0 ? maze.length - 1 : 0;
-      randomColEnd = Math.floor(Math.random() * maze[0].length);
+      yEnd = yStart == 0 ? maze.length - 1 : 0;
+      xEnd = Math.floor(Math.random() * maze[0].length);
     }
+
+    maze[yStart][xStart].value = 'O';
+    maze[yEnd][xEnd].value = 'X';
+
+    // Calcul des scores de chaque cellule
+    for (let x = 0 ; x < maze.length; x++) {
+      for (let y = 0 ; y < maze[0].length; y++) {
+        if ((y != yStart || x != xStart) && (y != yEnd || x != xEnd)) {
+          const g = Math.abs(xStart - x) + Math.abs(yStart - y);
+          const h = Math.abs(xEnd - x) + Math.abs(yEnd - y);
+          maze[y][x].value = g + h;
+        }
+      }
+    }
+
+    // Algorithme
+    const openList = [];
+    const closedList = [];
+    openList.push(maze[yStart][xStart]);
+    while (openList.length > 0) {
+      
+    }
+
+    console.log("==============")
+    for (const row of maze) {
+      let rowStr = "[";
+      for (const cell of row) {
+        rowStr += cell.value + ", ";
+      }
+      rowStr += "]";
+      console.log(rowStr);
+    }
+    console.log("==============")
+
 }
