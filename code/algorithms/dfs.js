@@ -1,40 +1,63 @@
 export function dfs(maze) {
-  const stack = []; // Pile remplie des coordonnées des cellules à traiter
-  // Sélection de coordonnées d'une cellule aléatoirement
-  const randomRow = Math.floor(Math.random() * maze.length);
-  const randomCol = Math.floor(Math.random() * maze[0].length);
-  stack.push([randomRow, randomCol]);
-  while (stack.length > 0) {
-    const [x, y] = stack.pop();      
-    maze[x][y].value = 1;
+    // Pile remplie des coordonnées des cellules à traiter
+    const stack = [];
 
-    if (x > 0 && maze[x - 1][y].value == 0 && !maze[x - 1][y].isQueued()){
-        stack.push([x - 1, y]);
-        maze[x - 1][y].queued = true;
-    }
-    if (y < maze[0].length - 1 && maze[x][y + 1].value == 0 && !maze[x][y + 1].isQueued()){
-        stack.push([x, y + 1]);
-        maze[x][y + 1].queued = true;
-    }
-    if (x < maze.length - 1 && maze[x + 1][y].value == 0 && !maze[x + 1][y].isQueued()){
-        stack.push([x + 1, y]);
-        maze[x + 1][y].queued = true;
-    }
-    if (y > 0 && maze[x][y - 1].value == 0 && !maze[x][y - 1].isQueued()){
-        stack.push([x, y - 1]);
-        maze[x][y - 1].queued = true;
+    // Sélection de coordonnées de la cellule de départ
+    const startCell = maze.getStartCell();
+    let x = startCell.x;
+    let y = startCell.y;
+    stack.push([x, y]);
+
+    // Tant que la pile n'est pas vide et que la cellule de fin n'est pas atteinte
+    while (stack.length > 0 && maze.grid[y][x] !== maze.getEndCell()) {
+        // Récupérer la cellule à traiter
+        [x, y] = stack.pop();
+        maze.grid[y][x].setVisited(true);
+
+        // Vérifier le mur du haut et ajouter la cellule voisine
+        if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited() && !maze.grid[y - 1][x].isQueued()) {
+            stack.push([x, y - 1]);
+            maze.grid[y - 1][x].setVisited(true);
+        }
+        // Vérifier le mur de droite et ajouter la cellule voisine
+        if (x < maze.width - 1 && !maze.grid[y][x].walls.right && !maze.grid[y][x + 1].isVisited() && !maze.grid[y][x + 1].isQueued()) {
+            stack.push([x + 1, y]);
+            maze.grid[y][x + 1].setVisited(true);
+        }
+        // Vérifier le mur du bas et ajouter la cellule voisine
+        if (y < maze.height - 1 && !maze.grid[y][x].walls.bottom && !maze.grid[y + 1][x].isVisited() && !maze.grid[y + 1][x].isQueued()) {
+            stack.push([x, y + 1]);
+            maze.grid[y + 1][x].setVisited(true);
+        }
+        // Vérifier le mur de gauche et ajouter la cellule voisine
+        if (x > 0 && !maze.grid[y][x].walls.left && !maze.grid[y][x - 1].isVisited() && !maze.grid[y][x - 1].isQueued()) {
+            stack.push([x - 1, y]);
+            maze.grid[y][x - 1].setVisited(true);
+        }
+
+        // Affichage du labyrinthe à l'étape courante avec les cellules visitées
+        for (let i = 0; i < maze.height; i++) {
+            let topLine = '';
+            let middleLine = '';
+            for (let j = 0; j < maze.width; j++) {
+                const cell = maze.grid[i][j];
+                topLine += cell.walls.top ? '+---' : '+   ';
+                if (cell === maze.getStartCell()) {
+                    middleLine += cell.walls.left ? '| E ' : '  E ';
+                } else if (cell === maze.getEndCell()) {
+                    middleLine += cell.walls.left ? '| S ' : '  S ';
+                } else {
+                    middleLine += cell.walls.left ? `| ${cell.isVisited() ? 'x' : ' '} ` : `  ${cell.isVisited() ? 'x' : ' '} `;
+                }
+            }
+            console.log(topLine + '+');
+            console.log(middleLine + '|');
+        }
+        console.log('+---'.repeat(maze.width) + '+');
+        console.log(''); // Ligne vide pour séparer les étapes
     }
 
-    // Affichage du labyrinthe à l'étape courante
-    console.log("==============")
-    for (const row of maze) {
-      let rowStr = "[";
-      for (const cell of row) {
-        rowStr += cell.value + ", ";
-      }
-      rowStr += "]";
-      console.log(rowStr);
+    if (maze.grid[y][x] === maze.getEndCell()) {
+        console.log("Sortie trouvée !");
     }
-    console.log("==============")
-  }
 }
