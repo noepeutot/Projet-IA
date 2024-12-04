@@ -97,6 +97,10 @@ export class Maze {
         this.resetVisitedCells();
     }
 
+    getDistanceBetweenCells(cell1, cell2) {
+        return Math.abs(cell1.x - cell2.x) + Math.abs(cell1.y - cell2.y);
+    }
+
     /**
      * Obtient une cellule adjacente aléatoire
      * @param {Cell} cell 
@@ -200,13 +204,7 @@ export class Maze {
             for (let x = 0; x < this.width; x++) {
                 const cell = this.grid[y][x];
                 topLine += cell.walls.top ? '+---' : '+   ';
-                if (cell === this.getStartCell()) {
-                    middleLine += cell.walls.left ? '| E ' : '  E ';
-                } else if (cell === this.getEndCell()) {
-                    middleLine += cell.walls.left ? '| S ' : '  S ';
-                } else {
-                    middleLine += cell.walls.left ? '|   ' : '    ';
-                }
+                    middleLine += cell.walls.left ? `| ${cell.value} ` : `  ${cell.value} `;
             }
             console.log(topLine + '+');
             console.log(middleLine + '|');

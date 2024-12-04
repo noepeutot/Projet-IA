@@ -2,6 +2,7 @@ export class Cell {
   queued = false; // Booléen indiquant si la cellule est dans la pile (utilisé pour l'algorithme DFS)
   x; // Coordonnée x de la cellule
   y; // Coordonnée y de la cellule
+  value; // Valeur de la cellule
   walls; // Objets contenant les murs de la cellule
   visited; // Booléen indiquant si la cellule a été visitée (utilisé pour l'algorithme de génération de labyrinthe et les algorithmes de recherche)
   type; // Type de la cellule (start, end, normal)
@@ -18,8 +19,10 @@ export class Cell {
   setType(type) {
     if (type === "start") {
       this.type = "start";
+      this.value = "E"
     } else if (type === "end") {
       this.type = "end";
+      this.value = "S"
     } else {
       this.type = "normal";
     }
