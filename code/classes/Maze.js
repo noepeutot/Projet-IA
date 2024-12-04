@@ -92,6 +92,9 @@ export class Maze {
                 this.currentCell = this.stack.pop();
             }
         }
+
+        // Réinitialise les cellules visitées
+        this.resetVisitedCells();
     }
 
     /**
@@ -174,6 +177,17 @@ export class Maze {
      */
     getRandomInt(max) {
         return Math.floor(Math.random() * max);
+    }
+    
+
+    /**
+     * Réinitialise les cellules visitées
+     */
+    resetVisitedCells() {
+        this.visitedCells = 0;
+        this.grid.forEach(row => {
+            row.forEach(cell => cell.setVisited(false));
+        });
     }
 
     /**

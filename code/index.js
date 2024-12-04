@@ -10,10 +10,10 @@ maze.displayMaze();
 console.log("==============")
 console.log("")
 
-// console.log("-- BFS --")
-// console.log("==============")
-// bfs(maze);
-// console.log("")
+/* console.log("-- BFS --")
+console.log("==============")
+bfs(maze);
+console.log("") */
 
 console.log("-- DFS --")
 console.log("==============")

@@ -1,10 +1,9 @@
 export class Cell {
   queued = false; // Booléen indiquant si la cellule est dans la pile (utilisé pour l'algorithme DFS)
-  value; // Valeur de la cellule 0 ou 1 (utilisé pour l'algorithme DFS)
-  x;
-  y;
+  x; // Coordonnée x de la cellule
+  y; // Coordonnée y de la cellule
   walls; // Objets contenant les murs de la cellule
-  visited; // Booléen indiquant si la cellule a été visitée (utilisé pour l'algorithme de génération de labyrinthe)
+  visited; // Booléen indiquant si la cellule a été visitée (utilisé pour l'algorithme de génération de labyrinthe et les algorithmes de recherche)
   type; // Type de la cellule (start, end, normal)
 
   constructor(x, y, value = 0) {
@@ -26,8 +25,12 @@ export class Cell {
     }
   }
 
-  setVisited() {
-    this.visited = true;
+  setVisited(bool = true) {
+    this.visited = bool;
+  }
+
+  isVisited() {
+    return this.visited;
   }
 
   isQueued() {
