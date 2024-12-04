@@ -1,40 +1,50 @@
 export function bfs(maze) {
-  const queue = []; // File remplie des coordonnées des cellules à traiter
-  // Sélection de coordonnées d'une cellule aléatoirement
-  const randomRow = Math.floor(Math.random() * maze.length);
-  const randomCol = Math.floor(Math.random() * maze[0].length);
-  queue.push([randomRow, randomCol]);
+  // File remplie des coordonnées des cellules à traiter
+  const queue = [];
+
+  // Sélection de coordonnées de la cellule de départ
+  const startCell = maze.getStartCell();
+  let row = startCell.y;
+  let col = startCell.x;
+  queue.push({row: row, col: col});
+
+  // Tant que la file n'est pas vide
   while (queue.length > 0) {
-    const [x, y] = queue.shift();      
-    maze[x][y].value = 1;
+    // Récupérer la cellule à traiter
+    const current = queue.shift();
+    row = current.row;
+    col = current.col;
+    maze.grid[row][col].setVisited(true);
 
-    if (x > 0 && maze[x - 1][y].value == 0 && !maze[x - 1][y].isQueued()){
-        queue.push([x - 1, y]);
-        maze[x - 1][y].queued = true;
+    // Vérifier le mur du haut et ajouter la cellule voisine
+    if (row > 0 && !maze.grid[row][col].walls.top && !maze.grid[row - 1][col].isVisited()) {
+      queue.push({row: row - 1, col: col});
+      maze.grid[row - 1][col].setVisited(true);
     }
-    if (y < maze[0].length - 1 && maze[x][y + 1].value == 0 && !maze[x][y + 1].isQueued()){
-        queue.push([x, y + 1]);
-        maze[x][y + 1].queued = true;
+    // Vérifier le mur de droite et ajouter la cellule voisine  
+    if (col < maze.width - 1 && !maze.grid[row][col].walls.right && !maze.grid[row][col + 1].isVisited()) {
+      queue.push({row: row, col: col + 1});
+      maze.grid[row][col + 1].setVisited(true);
     }
-    if (x < maze.length - 1 && maze[x + 1][y].value == 0 && !maze[x + 1][y].isQueued()){
-        queue.push([x + 1, y]);
-        maze[x + 1][y].queued = true;
+    // Vérifier le mur du bas et ajouter la cellule voisine
+    if (row < maze.height - 1 && !maze.grid[row][col].walls.bottom && !maze.grid[row + 1][col].isVisited()) {
+      queue.push({row: row + 1, col: col});
+      maze.grid[row + 1][col].setVisited(true);
     }
-    if (y > 0 && maze[x][y - 1].value == 0 && !maze[x][y - 1].isQueued()){
-        queue.push([x, y - 1]);
-        maze[x][y - 1].queued = true;
+    // Vérifier le mur de gauche et ajouter la cellule voisine
+    if (col > 0 && !maze.grid[row][col].walls.left && !maze.grid[row][col - 1].isVisited()) {
+      queue.push({row: row, col: col - 1});
+      maze.grid[row][col - 1].setVisited(true);
     }
 
-    // Affichage du labyrinthe à l'étape courante
-    console.log("==============")
-    for (const row of maze) {
-      let rowStr = "[";
-      for (const cell of row) {
-        rowStr += cell.value + ", ";
-      }
-      rowStr += "]";
-      console.log(rowStr);
+    // Si la cellule de fin est atteinte, sortir de la boucle
+    if (maze.grid[row][col] === maze.getEndCell()) {
+      console.log("Sortie trouvée !");
+      break;
     }
-    console.log("==============")
+
+    // Affichage du labyrinthe à l'étape courante avec les cellules visitées
+    maze.displayMaze();
+    console.log(''); // Ligne vide pour séparer les étapes
   }
 }

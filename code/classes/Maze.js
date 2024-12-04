@@ -205,7 +205,7 @@ export class Maze {
                 } else if (cell === this.getEndCell()) {
                     middleLine += cell.walls.left ? '| S ' : '  S ';
                 } else {
-                    middleLine += cell.walls.left ? '|   ' : '    ';
+                    middleLine += cell.walls.left ? `| ${cell.isVisited() ? 'x' : ' '} ` : `  ${cell.isVisited() ? 'x' : ' '} `;
                 }
             }
             console.log(topLine + '+');

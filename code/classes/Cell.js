@@ -11,7 +11,7 @@ export class Cell {
     this.x = x;
     this.y = y;
     this.walls = { top: true, right: true, bottom: true, left: true };
-    this.visited = false;
+    this.setVisited(false);
     this.setType("normal");
   }
 

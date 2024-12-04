@@ -15,45 +15,28 @@ export function dfs(maze) {
         maze.grid[y][x].setVisited(true);
 
         // Vérifier le mur du haut et ajouter la cellule voisine
-        if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited() && !maze.grid[y - 1][x].isQueued()) {
+        if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited()) {
             stack.push([x, y - 1]);
             maze.grid[y - 1][x].setVisited(true);
         }
         // Vérifier le mur de droite et ajouter la cellule voisine
-        if (x < maze.width - 1 && !maze.grid[y][x].walls.right && !maze.grid[y][x + 1].isVisited() && !maze.grid[y][x + 1].isQueued()) {
+        if (x < maze.width - 1 && !maze.grid[y][x].walls.right && !maze.grid[y][x + 1].isVisited()) {
             stack.push([x + 1, y]);
             maze.grid[y][x + 1].setVisited(true);
         }
         // Vérifier le mur du bas et ajouter la cellule voisine
-        if (y < maze.height - 1 && !maze.grid[y][x].walls.bottom && !maze.grid[y + 1][x].isVisited() && !maze.grid[y + 1][x].isQueued()) {
+        if (y < maze.height - 1 && !maze.grid[y][x].walls.bottom && !maze.grid[y + 1][x].isVisited()) {
             stack.push([x, y + 1]);
             maze.grid[y + 1][x].setVisited(true);
         }
         // Vérifier le mur de gauche et ajouter la cellule voisine
-        if (x > 0 && !maze.grid[y][x].walls.left && !maze.grid[y][x - 1].isVisited() && !maze.grid[y][x - 1].isQueued()) {
+        if (x > 0 && !maze.grid[y][x].walls.left && !maze.grid[y][x - 1].isVisited()) {
             stack.push([x - 1, y]);
             maze.grid[y][x - 1].setVisited(true);
         }
 
         // Affichage du labyrinthe à l'étape courante avec les cellules visitées
-        for (let i = 0; i < maze.height; i++) {
-            let topLine = '';
-            let middleLine = '';
-            for (let j = 0; j < maze.width; j++) {
-                const cell = maze.grid[i][j];
-                topLine += cell.walls.top ? '+---' : '+   ';
-                if (cell === maze.getStartCell()) {
-                    middleLine += cell.walls.left ? '| E ' : '  E ';
-                } else if (cell === maze.getEndCell()) {
-                    middleLine += cell.walls.left ? '| S ' : '  S ';
-                } else {
-                    middleLine += cell.walls.left ? `| ${cell.isVisited() ? 'x' : ' '} ` : `  ${cell.isVisited() ? 'x' : ' '} `;
-                }
-            }
-            console.log(topLine + '+');
-            console.log(middleLine + '|');
-        }
-        console.log('+---'.repeat(maze.width) + '+');
+        maze.displayMaze();
         console.log(''); // Ligne vide pour séparer les étapes
     }
 
