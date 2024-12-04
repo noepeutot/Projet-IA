@@ -14,7 +14,7 @@ import { aStar } from './algorithms/aStar.js';
 // dfs(maze)
 // console.log("")
 
-// let maze = new Maze(10, 10);
+let maze = new Maze(10, 10);
 // maze.displayMaze();
 
 aStar(maze);
