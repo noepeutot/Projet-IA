@@ -2,16 +2,16 @@ import {Cell} from './Cell.js';
 
 export class Maze {
     constructor(width, height) {
-        this.width = width;
-        this.height = height;
-        this.grid = this.createGrid();
-        this.stack = [];
-        this.currentCell = this.grid[this.getRandomInt(width)][this.getRandomInt(height)];
-        this.visitedCells = 0;
-        this.totalCells = width * height;
-        this.setStartCell(this.grid[0][0]);
-        this.setEndCell(this.grid[height - 1][width - 1]);
-        this.generateMaze();
+        this.width = width; // Largeur du labyrinthe
+        this.height = height; // Hauteur du labyrinthe
+        this.grid = this.createGrid(); // Grille de cellules
+        this.stack = []; // Pile pour l'algorithme de backtracking
+        this.currentCell = this.grid[this.getRandomInt(width)][this.getRandomInt(height)]; // Cellule de départ aléatoire
+        this.visitedCells = 0; // Nombre de cellules visitées
+        this.totalCells = width * height; // Nombre total de cellules
+        this.setStartCell(this.grid[0][0]); // Cellule de départ du labyrinthe
+        this.setEndCell(this.grid[height - 1][width - 1]); // Cellule de fin du labyrinthe
+        this.generateMaze(); // Génération du labyrinthe
     }
 
     /**
@@ -105,10 +105,10 @@ export class Maze {
     getRandomAdjacentCell(cell) {
         // Définit les directions possibles
         const directions = [
-            { dx: 0, dy: -1 }, // top
-            { dx: 1, dy: 0 },  // right
-            { dx: 0, dy: 1 },  // bottom
-            { dx: -1, dy: 0 }  // left
+            { dx: 0, dy: -1 }, // Haut
+            { dx: 1, dy: 0 },  // Droite
+            { dx: 0, dy: 1 },  // Bas
+            { dx: -1, dy: 0 }  // Gauche
         ];
 
         // Map les directions pour obtenir les cellules voisines
@@ -148,22 +148,22 @@ export class Maze {
         const dx = next.x - current.x;
         const dy = next.y - current.y;
 
-        // Si la cellule suivante est à droite
+        // Si la cellule suivante est à droite, casse le mur droit de la cellule courante et inversement
         if (dx === 1) {
             current.walls.right = false;
             next.walls.left = false;
         } 
-        // Si la cellule suivante est à gauche
+        // Si la cellule suivante est à gauche, casse le mur gauche de la cellule courante et inversement
         else if (dx === -1) {
             current.walls.left = false;
             next.walls.right = false;
         }
-        // Si la cellule suivante est en bas 
+        // Si la cellule suivante est en bas, casse le mur bas de la cellule courante et inversement
         else if (dy === 1) {
             current.walls.bottom = false;
             next.walls.top = false;
         }
-        // Si la cellule suivante est en haut
+        // Si la cellule suivante est en haut, casse le mur haut de la cellule courante et inversement  
         else if (dy === -1) {
             current.walls.top = false;
             next.walls.bottom = false;
@@ -200,13 +200,20 @@ export class Maze {
             for (let x = 0; x < this.width; x++) {
                 const cell = this.grid[y][x];
                 topLine += cell.walls.top ? '+---' : '+   ';
+                
+                // Définir le caractère à afficher selon le type de cellule
+                let cellChar = ' ';
                 if (cell === this.getStartCell()) {
-                    middleLine += cell.walls.left ? '| E ' : '  E ';
+                    cellChar = 'E';
                 } else if (cell === this.getEndCell()) {
-                    middleLine += cell.walls.left ? '| S ' : '  S ';
-                } else {
-                    middleLine += cell.walls.left ? `| ${cell.isVisited() ? 'x' : ' '} ` : `  ${cell.isVisited() ? 'x' : ' '} `;
+                    cellChar = 'S';
+                } else if (cell.getType() === "path") {
+                    cellChar = '●';
+                } else if (cell.isVisited()) {
+                    cellChar = 'x';
                 }
+                
+                middleLine += cell.walls.left ? `| ${cellChar} ` : `  ${cellChar} `;
             }
             console.log(topLine + '+');
             console.log(middleLine + '|');
