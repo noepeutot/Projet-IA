@@ -13,7 +13,6 @@ export class Cell {
     this.walls = { top: true, right: true, bottom: true, left: true };
     this.setVisited(false);
     this.setType("normal");
-    this.isOnPath = false;
   }
 
   /**
@@ -60,14 +59,6 @@ export class Cell {
    */
   isVisited() {
     return this.visited;
-  }
-
-  /**
-   * Retourne si la cellule est dans la file
-   * @returns {Boolean} - Booléen indiquant si la cellule est dans la file
-   */
-  isQueued() {
-    return this.queued;
   }
 }
 
