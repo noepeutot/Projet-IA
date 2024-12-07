@@ -220,4 +220,43 @@ export class Maze {
         }
         console.log('+---'.repeat(this.width) + '+');
     }
+
+    /**
+     * Rend le labyrinthe en HTML
+     * @param {HTMLElement} container - L'élément conteneur où afficher le labyrinthe
+     */
+    renderMaze(container) {
+        container.innerHTML = '';
+        const mazeElement = document.createElement('div');
+        mazeElement.className = 'maze';
+        
+        // Définir la grille CSS en fonction de la taille du labyrinthe
+        mazeElement.style.display = 'grid';
+        mazeElement.style.gridTemplateColumns = `repeat(${this.width}, 1fr)`;
+        mazeElement.style.gap = '0';
+        
+        // Créer chaque cellule
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                const cell = this.grid[y][x];
+                const cellElement = document.createElement('div');
+                cellElement.className = 'cell';
+                
+                // Ajouter les classes pour les murs
+                if (cell.walls.top) cellElement.classList.add('wall-top');
+                if (cell.walls.right) cellElement.classList.add('wall-right');
+                if (cell.walls.bottom) cellElement.classList.add('wall-bottom');
+                if (cell.walls.left) cellElement.classList.add('wall-left');
+                
+                // Ajouter les classes pour les types spéciaux
+                if (cell === this.start) cellElement.classList.add('start');
+                if (cell === this.end) cellElement.classList.add('end');
+                if (cell.getType() === "path") cellElement.classList.add('path');
+                
+                mazeElement.appendChild(cellElement);
+            }
+        }
+        
+        container.appendChild(mazeElement);
+    }
 }
