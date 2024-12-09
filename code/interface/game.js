@@ -133,18 +133,31 @@ function restartGame() {
 document.addEventListener('keydown', (event) => {
     let moved = false;
 
+    // Si touche échap, retourner à la page d'accueil
     if (event.key === 'Escape') {
+        window.location.href = 'home.html';
+    }
+
+    // Si touche espace, recommencer le labyrinthe
+    if (event.key === ' ') {
         restartGame();
         return;
     }
 
+    // Si touche haut, déplacer le joueur vers le haut
     if (event.key === 'ArrowUp' || event.key === 'z') {
         moved = maze.movePlayer(player, 'up');
-    } else if (event.key === 'ArrowRight' || event.key === 'd') {
+    }
+    // Si touche droite, déplacer le joueur vers la droite
+    else if (event.key === 'ArrowRight' || event.key === 'd') {
         moved = maze.movePlayer(player, 'right');
-    } else if (event.key === 'ArrowDown' || event.key === 's') {
+    }
+    // Si touche bas, déplacer le joueur vers le bas
+    else if (event.key === 'ArrowDown' || event.key === 's') {
         moved = maze.movePlayer(player, 'down');
-    } else if (event.key === 'ArrowLeft' || event.key === 'q') {
+    }
+    // Si touche gauche, déplacer le joueur vers la gauche
+    else if (event.key === 'ArrowLeft' || event.key === 'q') {
         moved = maze.movePlayer(player, 'left');
     }
 
