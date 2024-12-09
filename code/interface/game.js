@@ -133,6 +133,11 @@ function restartGame() {
 document.addEventListener('keydown', (event) => {
     let moved = false;
 
+    if (event.key === 'Escape') {
+        restartGame();
+        return;
+    }
+
     if (event.key === 'ArrowUp' || event.key === 'z') {
         moved = maze.movePlayer(player, 'up');
     } else if (event.key === 'ArrowRight' || event.key === 'd') {
