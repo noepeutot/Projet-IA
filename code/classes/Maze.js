@@ -191,6 +191,24 @@ export class Maze {
     }
 
     /**
+     * Réinitialise le labyrinthe et le joueur
+     */
+    resetMaze() {
+        // Replacer le joueur à la case départ
+        this.player.setPosition(this.start.x, this.start.y);
+        
+        // Enlever tous les chemins
+        this.grid.forEach(row => {
+            row.forEach(cell => {
+                if (cell.getType() === "path") {
+                    cell.setType("normal");
+                }
+                cell.setVisited(false);
+            });
+        });
+    }
+
+    /**
      * Ajoute un joueur au labyrinthe
      * @param {Player} player - Le joueur à ajouter
      * @param {Cell} startCell - La cellule de départ du joueur
@@ -243,6 +261,15 @@ export class Maze {
         }
 
         return false;
+    }
+
+    /**
+     * Définit la position du joueur
+     * @param {number} column - Position en x
+     * @param {number} row - Position en y
+     */
+    setPlayerPosition(column, row) {
+        this.player.setPosition(column, row);
     }
 
     /**
