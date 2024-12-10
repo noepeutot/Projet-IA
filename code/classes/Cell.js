@@ -2,6 +2,8 @@ export class Cell {
   queued = false; // Booléen indiquant si la cellule est dans la pile (utilisé pour l'algorithme DFS)
   x; // Coordonnée x de la cellule
   y; // Coordonnée y de la cellule
+  cout; // Coût de la cellule (utilisé pour l'algorithme A*)
+  heuristique; // Heuristique de la cellule (utilisé pour l'algorithme A*)
   value; // Valeur de la cellule
   walls; // Objets contenant les murs de la cellule
   visited; // Booléen indiquant si la cellule a été visitée (utilisé pour l'algorithme de génération de labyrinthe et les algorithmes de recherche)

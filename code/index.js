@@ -6,7 +6,7 @@ import { aStar } from './algorithms/aStar.js';
 
 console.log("-- Maze --")
 console.log("==============")
-let maze = new Maze(10, 10);
+let maze = new Maze(5, 5);
 maze.displayMaze();
 console.log("==============")
 console.log("")
@@ -16,7 +16,9 @@ console.log("==============")
 bfs(maze);
 console.log("") */
 
-console.log("-- DFS --")
-console.log("==============")
-dfs(maze)
-console.log("")
+// console.log("-- DFS --")
+// console.log("==============")
+// dfs(maze)
+// console.log("")
+
+// aStar(maze)
