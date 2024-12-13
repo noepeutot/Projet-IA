@@ -15,6 +15,7 @@ console.log("")
 // bfs(maze);
 // console.log("")
 
+
 console.log("-- DFS --")
 console.log("==============")
 let path = dfs(maze);
@@ -34,3 +35,4 @@ console.log("Finished : " + maze.isFinished());
 
 console.log("==============");
 console.log("");
+
