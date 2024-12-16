@@ -25,15 +25,18 @@ export function aStar(maze) {
 
         // 8. Si n1 est le but, reconstruire le chemin et sortir de la boucle
         if (current === endCell) {
+            let path = [];
             let pathCell = current;
             while (pathCell !== startCell) {
                 if (pathCell !== endCell) {
                     pathCell.setType("path");
+                    path.unshift(pathCell);
                 }
                 pathCell = pathCell.parent;
             }
+            path.unshift(startCell);
             maze.displayMaze();
-            return true;
+            return path;
         }
 
         // Définir les directions possibles
@@ -93,4 +96,5 @@ export function aStar(maze) {
             }
         }
     }
+    return null;
 }
