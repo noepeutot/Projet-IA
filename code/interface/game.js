@@ -70,6 +70,8 @@ function initGame() {
                 btn.classList.add('selected');
             }
         });
+
+        setAiDifficulty(aiDifficulty);
     }
 }
 
