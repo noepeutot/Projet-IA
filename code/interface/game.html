@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <a href="home.html" id="back-button">← Retour</a>
     <section id="menu">
         <h2>Contrôles</h2>
         <article>
@@ -44,10 +45,26 @@
         <div id="best-times"></div>
     </section>
 
+    <section id="difficulty-selector" class="hidden">
+        <h3>Difficulté de l'IA</h3>
+        <div class="difficulty-buttons">
+            <button class="difficulty-btn" data-difficulty="easy">Facile</button>
+            <button class="difficulty-btn" data-difficulty="medium">Moyen</button>
+            <button class="difficulty-btn" data-difficulty="hard">Difficile</button>
+        </div>
+    </section>
+
     <div id="success-message" class="success-message hidden">
         <div class="success-content">
             <h2>Félicitations !</h2>
             <p id="success-time"></p>
+        </div>
+    </div>
+
+    <div id="defeat-message" class="defeat-message hidden">
+        <div class="defeat-content">
+            <h2>Défaite ...</h2>
+            <p>L'IA a gagné !</p>
         </div>
     </div>
 
