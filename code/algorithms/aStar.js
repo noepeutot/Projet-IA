@@ -1,77 +1,90 @@
 export function aStar(maze) {
-    const startCell = maze.getStartCell();
-    startCell.cout = 0;
-    const endCell = maze.getEndCell();
+    // 1. Créer un ensemble ordonnées par f(n) qui contient les nœuds découverts, mais pas encore explorés
+    const open = [];
+    // 2. Créer un ensemble contenant les nœuds déjà explorés
+    const closed = [];
 
-    // // Calcul des scores de chaque cellule
-    // for (let row of maze.grid) {
-    //   for (let cell of row) {
-    //     if ((cell.y != startCell.y || cell.x != startCell.x) && (cell.y != endCell.y || cell.x != endCell.x)) {
-    //       const g = Math.abs(startCell.x - cell.x) + Math.abs(startCell.y - cell.y);
-    //       const h = Math.abs(endCell.x - cell.x) + Math.abs(endCell.y - cell.y);
-    //       cell.value = g + h;
-    //     }
-    //   } // ajouter nb de cellule parcourus
-    // }
+    const startCell = maze.getStartCell(); // n0 (nœud de départ)
+    const endCell = maze.getEndCell(); // nG (noeud de fin)
 
-    // Algorithme
-    const openList = [];
-    const closedList = [];
-    openList.push(startCell);
+    // 3. Insérer n0 dans open
+    startCell.cout = 0; // g(n0) = 0 car c'est le départ
+    startCell.heuristique = maze.getDistanceBetweenCells(startCell, endCell); // h(n0) = distance entre n0 et nG
+    startCell.value = startCell.cout + startCell.heuristique; // f(n0) = g(n0) + h(n0) = 0 + distance entre n0 et nG
+    open.push(startCell);
 
-    while (openList.length > 0 && !closedList.includes(endCell)) {
-      openList.sort((a, b) => a.value - b.value);
-      const current = openList.shift();
-      closedList.push(current);
+    // 4 + 5. Boucle principale. Tant qu'open n'est pas vide et que nG n'est pas dans closed
+    while (open.length > 0 && !closed.includes(endCell)) {
 
-      if (current != endCell) {
-        if (current.x > 0 && !current.walls.left && !closedList.includes(maze[current.y][current.x - 1])) {
-          cellGauche = maze[current.y][current.x - 1];
+        // 6. n1 = nœud au début d'open avec le plus petit f(n)
+        open.sort((a, b) => a.value - b.value);
 
-          const coutTransition = current.cout + 1;
-          const heuristiqueTransition = maze.getDistanceBetweenCells(cellGauche, endCell);
+        // 7. Enlever n1 de open et l'ajouter dans closed
+        const current = open.shift();
+        closed.push(current);
 
-          if (openList.includes(cellGauche) || closedList.includes(cellGauche) &&
-              coutTransition + heuristiqueTransition < cellGauche.cout + cellGauche.heuristique) {
-                cellGauche.cout = coutTransition;
-                cellGauche.heuristique = heuristiqueTransition;
-                cellGauche.value = cellGauche.cout + cellGauche.heuristique;
-      
-                openList.push(cellGauche);
-                cellGauche.parent = current;
-              }
-        } 
-        if (current.y > 0 && !current.walls.top && !closedList.includes(maze[current.y - 1][current.x])) {
-          cellTop = maze[current.y - 1][current.x];
-
-          const coutTransition = current.cout + 1;
-          const heuristiqueTransition = maze.getDistanceBetweenCells(cellTop, endCell);
-
-          if (openList.includes(cellTop) || closedList.includes(cellTop) &&
-              coutTransition + heuristiqueTransition < cellTop.cout + cellTop.heuristique) {
-                cellTop.cout = coutTransition;
-                cellTop.heuristique = heuristiqueTransition;
-                cellTop.value = cellTop.cout + cellTop.heuristique;
-      
-                openList.push(cellTop);
-                cellTop.parent = current;
-              }
+        // 8. Si n1 est le but, sortir de la boucle (n1 = nG)
+        if (current === endCell) {
+            break;
         }
-        if (current.x < maze[0].length - 1 && !closedList.includes(maze[current.y][current.x + 1])) {
-          openList.push(maze[current.y][current.x + 1]);
-          maze[current.y][current.x + 1].parent = current;
+
+        // Définir les directions possibles
+        const directions = [
+            {dx: -1, dy: 0, wall: 'left'},
+            {dx: 0, dy: -1, wall: 'top'},
+            {dx: 1, dy: 0, wall: 'right'},
+            {dx: 0, dy: 1, wall: 'bottom'}
+        ];
+
+        // 9. Pour chaque noeud successeur n2 de n1
+        for (const dir of directions) {
+            // Définir les coordonnées du successeur
+            const newX = current.x + dir.dx;
+            const newY = current.y + dir.dy;
+
+            // Vérifier si le successeur est dans la grille et si la direction n'est pas bloquée
+            if (newX >= 0 && newX < maze.width &&
+                newY >= 0 && newY < maze.height &&
+                !current.walls[dir.wall]) {
+
+                // Définir le successeur
+                const successor = maze.grid[newY][newX];
+
+                // 10. Initialiser g(n2) = g(n1) + coût de la transition
+                const newCost = current.cout + 1;
+
+                // Vérifier si le successeur n'est pas dans closed
+                if (!closed.includes(successor)) {
+                    // 11. mettre parent(n2) = n1
+                    successor.parent = current;
+
+                    // 12 & 13. Vérification et mise à jour des valeurs
+                    successor.cout = newCost; // g(n) = coût du parent + 1
+                    successor.heuristique = maze.getDistanceBetweenCells(successor, endCell); // h(n)
+                    successor.value = successor.cout + successor.heuristique; // f(n) = g(n) + h(n)
+
+                    // 14. Insérer n2 dans open en triant par f(n)
+                    if (!open.includes(successor)) {
+                        open.push(successor);
+                    }
+                }
+            }
         }
-        if (current.y < maze.length - 1 && !closedList.includes(maze[current.y + 1][current.x])) {
-          openList.push(maze[current.y + 1][current.x]);
-          maze[current.y + 1][current.x].parent = current;
-        }
-      }
     }
 
+    // Reconstruction du chemin si une solution est trouvée
+    if (closed.includes(endCell)) {
+        let current = endCell;
+        while (current !== startCell) {
+            if (current !== endCell) {
+                current.setType("path");
+            }
+            current = current.parent;
+        }
+        maze.displayMaze();
+        return true;
+    }
 
-
-    // console.log(openList)
-    // console.log(closeList)
-
-    maze.displayMaze();
+    console.log("Aucune solution trouvée");
+    return false;
 }

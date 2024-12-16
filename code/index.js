@@ -10,6 +10,12 @@ console.log("==============")
 let maze = new Maze(10, 10);
 maze.displayMaze();
 console.log("==============")
+console.log("");
+
+console.log("-- A* --")
+console.log("==============")
+aStar(maze);
+console.log("==============")
 console.log("")
 
 // console.log("-- BFS --")
@@ -23,7 +29,7 @@ console.log("")
 // let path = dfs(maze);
 // console.log(path);
 // console.log("")
-//
+
 // console.log("-- Joueur --")
 // console.log("==============")
 // let player = new Player('Joueur 1');
