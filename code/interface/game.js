@@ -1,5 +1,6 @@
 import { dfs } from '../algorithms/dfs.js';
 import { bfs } from '../algorithms/bfs.js';
+import { aStar } from '../algorithms/aStar.js';
 import { Maze } from '../classes/Maze.js';
 import { Player } from '../classes/Player.js';
 
@@ -158,6 +159,9 @@ function applyAlgorithm() {
     if (selectedAlgo === 'dfs') {
         dfs(maze);
         console.log('dfs');
+    } if (selectedAlgo === 'aStar') {
+        aStar(maze);
+        console.log('aStar');
     } else {
         bfs(maze);
         console.log('bfs');
