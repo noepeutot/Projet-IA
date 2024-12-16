@@ -97,6 +97,12 @@ export class Maze {
         this.resetVisitedCells();
     }
 
+    /**
+     * Obtient la distance entre deux cellules
+     * @param {Cell} cell1 
+     * @param {Cell} cell2 
+     * @returns {number}
+     */
     getDistanceBetweenCells(cell1, cell2) {
         return Math.abs(cell1.x - cell2.x) + Math.abs(cell1.y - cell2.y);
     }
