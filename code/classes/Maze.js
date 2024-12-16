@@ -98,6 +98,16 @@ export class Maze {
     }
 
     /**
+     * Obtient la distance entre deux cellules
+     * @param {Cell} cell1 
+     * @param {Cell} cell2 
+     * @returns {number}
+     */
+    getDistanceBetweenCells(cell1, cell2) {
+        return Math.abs(cell1.x - cell2.x) + Math.abs(cell1.y - cell2.y);
+    }
+
+    /**
      * Obtient une cellule adjacente aléatoire
      * @param {Cell} cell 
      * @returns {Cell}
@@ -163,7 +173,7 @@ export class Maze {
             current.walls.bottom = false;
             next.walls.top = false;
         }
-        // Si la cellule suivante est en haut, casse le mur haut de la cellule courante et inversement  
+        // Si la cellule suivante est en haut, casse le mur haut de la cellule courante et inversement
         else if (dy === -1) {
             current.walls.top = false;
             next.walls.bottom = false;
