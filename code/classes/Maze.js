@@ -196,6 +196,7 @@ export class Maze {
     resetMaze() {
         // Replacer le joueur à la case départ
         this.player.setPosition(this.start.x, this.start.y);
+        this.aiPlayer.setPosition(this.start.x, this.start.y);
         
         // Enlever tous les chemins
         this.grid.forEach(row => {
@@ -209,6 +210,15 @@ export class Maze {
     }
 
     /**
+     * Cache le chemin
+     */
+    hidePath() {
+        this.grid.forEach(row => {
+            row.forEach(cell => cell.setType("normal"));
+        });
+    }
+
+    /**
      * Ajoute un joueur au labyrinthe
      * @param {Player} player - Le joueur à ajouter
      * @param {Cell} startCell - La cellule de départ du joueur
@@ -216,6 +226,16 @@ export class Maze {
     addPlayer(player, startCell) {
         this.player = player;
         this.player.setPosition(startCell.x, startCell.y);
+    }
+
+    /**
+     * Ajoute un joueur IA au labyrinthe
+     * @param {Player} aiPlayer - Le joueur IA à ajouter
+     * @param {Cell} startCell - La cellule de départ du joueur IA
+     */
+    addAIPlayer(aiPlayer, startCell) {
+        this.aiPlayer = aiPlayer;
+        this.aiPlayer.setPosition(startCell.x, startCell.y);
     }
 
     /**
@@ -278,6 +298,14 @@ export class Maze {
      */
     isFinished() {
         return this.player.getPosition().column === this.end.x && this.player.getPosition().row === this.end.y;
+    }
+
+    /**
+     * Vérifie si le joueur IA a atteint la cellule de fin
+     * @returns {boolean} - True si le joueur IA a atteint la cellule de fin, False sinon
+     */
+    isAIFinished() {
+        return this.aiPlayer && this.aiPlayer.getPosition().column === this.end.x && this.aiPlayer.getPosition().row === this.end.y;
     }
 
     /**
@@ -351,6 +379,11 @@ export class Maze {
                 // Ajouter le joueur s'il est sur cette cellule
                 if (this.player && this.player.getPosition().column === x && this.player.getPosition().row === y) {
                     cellElement.classList.add('player');
+                }
+
+                // Ajouter le joueur IA s'il est sur cette cellule
+                if (this.aiPlayer && this.aiPlayer.getPosition().column === x && this.aiPlayer.getPosition().row === y) {
+                    cellElement.classList.add('ai-player');
                 }
 
                 mazeElement.appendChild(cellElement);

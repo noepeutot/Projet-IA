@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Runner - Options</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <a href="home.html" id="back-button">← Retour</a>
+    <main>
+        <h1>Options</h1>
+        <div class="options-container">
+            <div class="color-option">
+                <label for="player-color">Couleur du joueur</label>
+                <div class="color-preview">
+                    <input type="color" id="player-color" value="#f1c40f">
+                    <div class="preview-box player"></div>
+                </div>
+            </div>
+            <div class="color-option">
+                <label for="start-color">Couleur de départ</label>
+                <div class="color-preview">
+                    <input type="color" id="start-color" value="#27ae60">
+                    <div class="preview-box start"></div>
+                </div>
+            </div>
+            <div class="color-option">
+                <label for="end-color">Couleur d'arrivée</label>
+                <div class="color-preview">
+                    <input type="color" id="end-color" value="#c0392b">
+                    <div class="preview-box end"></div>
+                </div>
+            </div>
+            <button id="save-options">Sauvegarder</button>
+            <button id="reset-options">Réinitialiser</button>
+        </div>
+    </main>
+    <script src="options.js"></script>
+</body>
+</html>
