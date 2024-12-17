@@ -205,8 +205,8 @@ export class Maze {
      */
     resetMaze() {
         // Replacer le joueur à la case départ
-        this.player.setPosition(this.start.x, this.start.y);
-        this.aiPlayer.setPosition(this.start.x, this.start.y);
+        if(this.player) this.player.setPosition(this.start.x, this.start.y);
+        if(this.aiPlayer) this.aiPlayer.setPosition(this.start.x, this.start.y);
         
         // Enlever tous les chemins
         this.grid.forEach(row => {
