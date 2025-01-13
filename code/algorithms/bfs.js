@@ -39,8 +39,6 @@ export function bfs(maze) {
                 maze.grid[pos.row][pos.col].setType("path");
             });
 
-            // Afficher le labyrinthe avec le chemin
-            maze.displayMaze();
         } else {
             // Vérifier si la cellule voisine en haut est valide et non visitée et ajouter à la file et ajouter le parent
             if (row > 0 && !maze.grid[row][col].walls.top && !maze.grid[row - 1][col].isVisited()) {

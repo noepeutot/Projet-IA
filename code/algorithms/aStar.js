@@ -35,7 +35,6 @@ export function aStar(maze) {
                 pathCell = pathCell.parent;
             }
             path.unshift(startCell);
-            maze.displayMaze();
             return path;
         }
 
