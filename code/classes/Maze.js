@@ -32,6 +32,11 @@ export class Maze {
         return grid;
     }
 
+
+    // ===========================
+    // ===== Getter & Setter =====
+    // ===========================
+
     /**
      * Obtient la cellule de départ
      * @returns {Cell}
@@ -65,6 +70,11 @@ export class Maze {
         this.end = cell;
         cell.setType("end");
     }
+
+
+    // ================================================
+    // ===== Generation en Recursive Backtracking =====
+    // ================================================
 
     /**
      * Génère le labyrinthe en utilisant l'algorithme de recursive backtracking
@@ -180,6 +190,11 @@ export class Maze {
         }
     }
 
+
+    // =======================
+    // ===== Utilitaires =====
+    // =======================
+
     /**
      * Obtient un nombre aléatoire entier
      * @param {number} max 
@@ -227,6 +242,11 @@ export class Maze {
             row.forEach(cell => cell.setType("normal"));
         });
     }
+
+
+    // ===================
+    // ===== Joueurs =====
+    // ===================
 
     /**
      * Ajoute un joueur au labyrinthe
@@ -302,6 +322,11 @@ export class Maze {
         this.player.setPosition(column, row);
     }
 
+
+    // =========================
+    // ===== Vérifications =====
+    // =========================
+
     /**
      * Vérifie si le joueur a atteint la cellule de fin
      * @returns {boolean} - True si le joueur a atteint la cellule de fin, False sinon
@@ -317,6 +342,11 @@ export class Maze {
     isAIFinished() {
         return this.aiPlayer && this.aiPlayer.getPosition().column === this.end.x && this.aiPlayer.getPosition().row === this.end.y;
     }
+
+
+    // =====================
+    // ===== Affichage =====
+    // =====================
 
     /**
      * Affiche le labyrinthe
