@@ -16,7 +16,7 @@ export function bfs(maze) {
     const startCell = maze.getStartCell();
     let x = startCell.x;
     let y = startCell.y;
-    queue.push({x: x, y: y}); 
+    queue.push({x: x, y: y});
 
     // Chemin trouvé
     let path = null;
