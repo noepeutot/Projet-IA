@@ -1,5 +1,5 @@
-import { bfs } from "../algorithms/bfs.js";
-import { Maze } from "../classes/Maze.js";
+import { bfs } from "../../algorithms/bfs.js";
+import { Maze } from "../../classes/Maze.js";
 
 // Mock de Maze et Cell pour les tests
 class MockCell {

@@ -1,5 +1,5 @@
-import { Maze } from '../classes/Maze.js';
-import { Cell } from '../classes/Cell.js';
+import { Maze } from '../../classes/Maze.js';
+import { Cell } from '../../classes/Cell.js';
 
 function testMaze() {
     // Créer un labyrinthe de test

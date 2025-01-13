@@ -1,6 +1,6 @@
-import { dfs } from '../algorithms/dfs.js'; // Importer depuis algorithms/dfs.js
-import { Maze } from '../classes/Maze.js'; // Importer depuis classes/Maze.js
-import { Cell } from '../classes/Cell.js'; // Importer depuis classes/Cell.js
+import { dfs } from '../../algorithms/dfs.js'; // Importer depuis algorithms/dfs.js
+import { Maze } from '../../classes/Maze.js'; // Importer depuis classes/Maze.js
+import { Cell } from '../../classes/Cell.js'; // Importer depuis classes/Cell.js
 
 // Mock de Maze et Cell pour les tests
 class MockCell {

@@ -1,4 +1,4 @@
-import { Cell } from '../classes/Cell.js';
+import { Cell } from '../../classes/Cell.js';
 
 function testCell() {
     // Créer une cellule de test

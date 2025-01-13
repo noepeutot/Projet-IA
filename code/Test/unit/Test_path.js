@@ -1,4 +1,4 @@
-import { reconstructPath } from '../algorithms/path.js';
+import { reconstructPath } from '../../algorithms/path.js';
 
 function testReconstructPath() {
     // Simuler une map des parents
