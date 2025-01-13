@@ -31,7 +31,6 @@ export function dfs(maze) {
 
         // Si la cellule est la cellule de fin
         if (maze.grid[row][col] === maze.getEndCell()) {
-            console.log("Sortie trouvée !!");
             // Reconstruire le chemin
             path = reconstructPath(parents, startCell, { row, col });
 
@@ -40,8 +39,6 @@ export function dfs(maze) {
                 maze.grid[pos.row][pos.col].setType("path");
             });
 
-            // Afficher le labyrinthe avec le chemin
-            maze.displayMaze();
         } else {
 
             // Vérifier le mur du haut et ajouter la cellule voisine dans la pile et ajouter le parent
