@@ -25,26 +25,32 @@ export function aStar(maze) {
 
         // 8. Si n1 est le but, reconstruire le chemin et sortir de la boucle
         if (current === endCell) {
+            // Tableau qui contiendra le chemin
             let path = [];
+            // Cellule courante pour reconstruire le chemin
             let pathCell = current;
+            // Tant qu'on n'est pas arrivé à la cellule de départ
             while (pathCell !== startCell) {
-                if (pathCell !== endCell) {
-                    pathCell.setType("path");
-                    path.unshift(pathCell);
-                }
+                path.unshift({x: pathCell.x, y: pathCell.y});
                 pathCell = pathCell.parent;
             }
-            path.unshift(startCell);
-            maze.displayMaze();
+            // Ajouter la cellule de départ
+            path.unshift({x: startCell.x, y: startCell.y});
+
+            // Marquer le chemin
+            path.forEach(pos => {
+                maze.grid[pos.y][pos.x].setType("path");
+            });
+
             return path;
         }
 
         // Définir les directions possibles
         const directions = [
-            {dx: -1, dy: 0, wall: 'left'},
-            {dx: 0, dy: -1, wall: 'top'},
-            {dx: 1, dy: 0, wall: 'right'},
-            {dx: 0, dy: 1, wall: 'bottom'}
+            { dx: -1, dy: 0, wall: 'left' },
+            { dx: 0, dy: -1, wall: 'top' },
+            { dx: 1, dy: 0, wall: 'right' },
+            { dx: 0, dy: 1, wall: 'bottom' }
         ];
 
         // 9. Pour chaque nœud successeur n2 de n1
@@ -83,12 +89,12 @@ export function aStar(maze) {
                 if (existingInOpen && successor.value < existingInOpen.value) {
                     open = open.filter(n => n !== existingInOpen); // On enlève n2 de l'open
                     open.push(successor); // On ajoute n2 à l'open
-                } 
+                }
                 // 12.2. Si n2 existe dans closed et que son f(n) est plus grand que le f(n) de n2
                 else if (existingInClosed && successor.value < existingInClosed.value) {
                     closed = closed.filter(n => n !== existingInClosed); // On enlève n2 de closed
                     open.push(successor); // On ajoute n2 à l'open
-                } 
+                }
                 // 13 & 14. Si n2 n'est ni dans l'open ni dans closed
                 else if (!existingInOpen && !existingInClosed) {
                     open.push(successor); // On ajoute n2 à l'open

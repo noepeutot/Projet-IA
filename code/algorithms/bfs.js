@@ -14,9 +14,9 @@ export function bfs(maze) {
 
     // Coordonnées de la cellule de départ
     const startCell = maze.getStartCell();
-    let row = startCell.y;
-    let col = startCell.x;
-    queue.push({row: row, col: col}); 
+    let x = startCell.x;
+    let y = startCell.y;
+    queue.push({x: x, y: y}); 
 
     // Chemin trouvé
     let path = null;
@@ -25,51 +25,44 @@ export function bfs(maze) {
     while (queue.length > 0 && !path) {
         // Récupérer la cellule à traiter
         const current = queue.shift();
-        row = current.row;
-        col = current.col;
-        maze.grid[row][col].setVisited(true);
+        x = current.x;
+        y = current.y;
+        maze.grid[y][x].setVisited(true);
 
         // Si la cellule est la cellule de fin
-        if (maze.grid[row][col] === maze.getEndCell()) {
+        if (maze.grid[y][x] === maze.getEndCell()) {
             // Reconstruire le chemin
-            path = reconstructPath(parents, startCell, {row, col});
+            path = reconstructPath(parents, startCell, {x, y});
 
             // Marquer les cellules du chemin
             path.forEach(pos => {
-                maze.grid[pos.row][pos.col].setType("path");
+                maze.grid[pos.y][pos.x].setType("path");
             });
-
-            // Afficher le labyrinthe avec le chemin
-            maze.displayMaze();
         } else {
             // Vérifier si la cellule voisine en haut est valide et non visitée et ajouter à la file et ajouter le parent
-            if (row > 0 && !maze.grid[row][col].walls.top && !maze.grid[row - 1][col].isVisited()) {
-              queue.push({row: row - 1, col: col});
-              maze.grid[row - 1][col].setVisited(true);
-              parents.set(`${row - 1},${col}`, {row, col});
+            if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited()) {
+              queue.push({x: x, y: y - 1});
+              maze.grid[y - 1][x].setVisited(true);
+              parents.set(`${x},${y - 1}`, {x, y});
             }
             // Vérifier si la cellule voisine à droite est valide et non visitée et ajouter à la file et ajouter le parent
-            if (col < maze.width - 1 && !maze.grid[row][col].walls.right && !maze.grid[row][col + 1].isVisited()) {
-              queue.push({row: row, col: col + 1});
-              maze.grid[row][col + 1].setVisited(true);
-              parents.set(`${row},${col + 1}`, {row, col});
+            if (x < maze.width - 1 && !maze.grid[y][x].walls.right && !maze.grid[y][x + 1].isVisited()) {
+              queue.push({x: x + 1, y: y});
+              maze.grid[y][x + 1].setVisited(true);
+              parents.set(`${x + 1},${y}`, {x, y});
             }
             // Vérifier si la cellule voisine en bas est valide et non visitée et ajouter à la file et ajouter le parent
-            if (row < maze.height - 1 && !maze.grid[row][col].walls.bottom && !maze.grid[row + 1][col].isVisited()) {
-              queue.push({row: row + 1, col: col});
-              maze.grid[row + 1][col].setVisited(true);
-              parents.set(`${row + 1},${col}`, {row, col});
+            if (y < maze.height - 1 && !maze.grid[y][x].walls.bottom && !maze.grid[y + 1][x].isVisited()) {
+              queue.push({x: x, y: y + 1});
+              maze.grid[y + 1][x].setVisited(true);
+              parents.set(`${x},${y + 1}`, {x, y});
             }
             // Vérifier si la cellule voisine à gauche est valide et non visitée et ajouter à la file et ajouter le parent
-            if (col > 0 && !maze.grid[row][col].walls.left && !maze.grid[row][col - 1].isVisited()) {
-              queue.push({row: row, col: col - 1});
-              maze.grid[row][col - 1].setVisited(true);
-              parents.set(`${row},${col - 1}`, {row, col});
+            if (x > 0 && !maze.grid[y][x].walls.left && !maze.grid[y][x - 1].isVisited()) {
+              queue.push({x: x - 1, y: y});
+              maze.grid[y][x - 1].setVisited(true);
+              parents.set(`${x - 1},${y}`, {x, y});
             }
-
-            // Affichage du labyrinthe à l'étape courante avec les cellules visitées
-            // maze.displayMaze(); 
-            // console.log(''); // Ligne vide pour séparer les étapes
         }
     }
 
