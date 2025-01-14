@@ -21,8 +21,8 @@ export function dfs(maze) {
     // Chemin trouvé
     let path = null;
 
-    // Tant que la pile n'est pas vide et que le chemin n'est pas trouvé
-    while (stack.length > 0 && !path) {
+    // Tant que la pile n'est pas vide
+    while (stack.length > 0) {
         // Récupérer la cellule à traiter
         const current = stack.pop();
         x = current.x;

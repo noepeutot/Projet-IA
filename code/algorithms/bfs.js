@@ -21,8 +21,8 @@ export function bfs(maze) {
     // Chemin trouvé
     let path = null;
 
-    // Tant que la file n'est pas vide et que le chemin n'est pas trouvé
-    while (queue.length > 0 && !path) {
+    // Tant que la file n'est pas vide
+    while (queue.length > 0) {
         // Récupérer la cellule à traiter
         const current = queue.shift();
         x = current.x;
