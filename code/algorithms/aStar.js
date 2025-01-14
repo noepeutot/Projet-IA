@@ -1,27 +1,36 @@
 export function aStar(maze) {
-    // 1. Créer un ensemble ordonnées par f(n) qui contient les nœuds découverts, mais pas encore explorés
+    // 1. Créer un ensemble ordonné par f(n) qui contient les nœuds découverts, mais pas encore explorés
     let open = [];
     // 2. Créer un ensemble contenant les nœuds déjà explorés
-    let closed = [];
+    let closed = new Set();  // Utilisation d'un Set pour une recherche plus efficace
 
     const startCell = maze.getStartCell(); // n0 (nœud de départ)
     const endCell = maze.getEndCell(); // nG (noeud de fin)
 
-    // 3. Insérer n0 dans l'open
+    // Initialiser toutes les cellules
+    maze.grid.forEach(row => {
+        row.forEach(cell => {
+            cell.cout = Infinity;      // g(n)
+            cell.heuristique = Infinity; // h(n)
+            cell.value = Infinity;     // f(n)
+            cell.parent = null;
+        });
+    });
+
+    // 3. Insérer n0 dans l'open avec les valeurs initiales
     startCell.cout = 0; // g(n0) = 0 car c'est le départ
     startCell.heuristique = maze.getDistanceBetweenCells(startCell, endCell); // h(n0) = distance entre n0 et nG
     startCell.value = startCell.cout + startCell.heuristique; // f(n0) = g(n0) + h(n0) = 0 + distance entre n0 et nG
     open.push(startCell);
 
     // 4 + 5. Boucle principale. Tant qu'open n'est pas vide et que nG n'est pas dans closed
-    while (open.length > 0 && !closed.includes(endCell)) {
-
+    while (open.length > 0 && !closed.has(endCell)) {
         // 6. Sélectionner n1 = nœud avec le plus petit f(n) dans open
         open.sort((a, b) => a.value - b.value);
 
         // 7. Enlever n1 de open et l'ajouter dans closed
         const current = open.shift();
-        closed.push(current);
+        closed.add(current);
 
         // 8. Si n1 est le but, reconstruire le chemin et sortir de la boucle
         if (current === endCell) {
@@ -71,37 +80,28 @@ export function aStar(maze) {
                 // 10. Initialiser g(n2) = g(n1) + coût de la transition
                 const newCost = current.cout + 1;
 
-                // 11. Définir le parent de n2
-                if (successor !== current.parent) {
+                // Si le successeur n'est pas dans closed OU si on trouve un meilleur chemin
+                if (!closed.has(successor) || newCost < successor.cout) {
+                    // 11. Mettre à jour les valeurs du successeur
+                    successor.cout = newCost;
+                    successor.heuristique = maze.getDistanceBetweenCells(successor, endCell);
+                    successor.value = successor.cout + successor.heuristique;
                     successor.parent = current;
-                }
 
-                // Calculer les valeurs pour n2
-                successor.cout = newCost;
-                successor.heuristique = maze.getDistanceBetweenCells(successor, endCell);
-                successor.value = successor.cout + successor.heuristique;
+                    // 12. Si le successeur était dans closed, le retirer
+                    if (closed.has(successor)) {
+                        closed.delete(successor);
+                    }
 
-                // 12. Vérifier si n2 existe dans l'open ou closed avec un f(n) plus grand
-                // On cherche n2 dans l'open et dans closed
-                const existingInOpen = open.find(n => n === successor);
-                const existingInClosed = closed.find(n => n === successor);
-
-                // 12.1. Si n2 existe dans l'open et que son f(n) est plus grand que le f(n) de n2
-                if (existingInOpen && successor.value < existingInOpen.value) {
-                    open = open.filter(n => n !== existingInOpen); // On enlève n2 de l'open
-                    open.push(successor); // On ajoute n2 à l'open
-                }
-                // 12.2. Si n2 existe dans closed et que son f(n) est plus grand que le f(n) de n2
-                else if (existingInClosed && successor.value < existingInClosed.value) {
-                    closed = closed.filter(n => n !== existingInClosed); // On enlève n2 de closed
-                    open.push(successor); // On ajoute n2 à l'open
-                }
-                // 13 & 14. Si n2 n'est ni dans l'open ni dans closed
-                else if (!existingInOpen && !existingInClosed) {
-                    open.push(successor); // On ajoute n2 à l'open
+                    // 13. Si le successeur n'est pas dans open, l'ajouter
+                    if (!open.includes(successor)) {
+                        open.push(successor);
+                    }
                 }
             }
         }
     }
+
+    // Si aucun chemin n'est trouvé
     return null;
 }

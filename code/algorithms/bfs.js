@@ -38,6 +38,8 @@ export function bfs(maze) {
             path.forEach(pos => {
                 maze.grid[pos.y][pos.x].setType("path");
             });
+
+            return path;
         } else {
             // Vérifier si la cellule voisine en haut est valide et non visitée et ajouter à la file et ajouter le parent
             if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited()) {
