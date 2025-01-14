@@ -13,13 +13,13 @@ export function reconstructPath(parents, startCell, endPos) {
     let current = endPos;
 
     // Tant que la cellule courante n'est pas la cellule de départ
-    while (current.row !== startCell.y || current.col !== startCell.x) {
+    while (current.x !== startCell.x || current.y !== startCell.y) {
         path.unshift(current);
-        current = parents.get(`${current.row},${current.col}`);
+        current = parents.get(`${current.x},${current.y}`);
     }
 
     // Ajouter la cellule de départ au début du chemin
-    path.unshift({row: startCell.y, col: startCell.x});
+    path.unshift({x: startCell.x, y: startCell.y});
 
     return path;
 }

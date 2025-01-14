@@ -1,7 +1,7 @@
 import { Cell } from './Cell.js';
 
 export class Maze {
-    constructor(width, height) {
+    constructor(width, height, type) {
         this.width = width; // Largeur du labyrinthe
         this.height = height; // Hauteur du labyrinthe
         this.grid = this.createGrid(); // Grille de cellules
@@ -11,7 +11,11 @@ export class Maze {
         this.totalCells = width * height; // Nombre total de cellules
         this.setStartCell(this.grid[0][0]); // Cellule de départ du labyrinthe
         this.setEndCell(this.grid[height - 1][width - 1]); // Cellule de fin du labyrinthe
-        this.generateMaze(); // Génération du labyrinthe
+        if(type==="recursive"){
+            this.generateRecursiveMaze(); // Génération du labyrinthe en utilisant l'algorithme de recursive backtracking
+        } else if(type==="random") {
+            this.generateRandomMaze(); // Génération du labyrinthe en utilisant l'algorithme de random
+        }
     }
 
     /**
@@ -79,7 +83,7 @@ export class Maze {
     /**
      * Génère le labyrinthe en utilisant l'algorithme de recursive backtracking
      */
-    generateMaze() {
+    generateRecursiveMaze() {
         // Marque la cellule courante comme visitée
         this.currentCell.visited = true;
         this.visitedCells++;
@@ -190,6 +194,42 @@ export class Maze {
         }
     }
 
+    // ================================
+    // ===== Generation en Random =====
+    // ================================
+
+    /**
+     * Génère le labyrinthe en utilisant l'algorithme de random
+     */
+    generateRandomMaze() {
+        // Parcourt chaque cellule de la grille
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                const cell = this.grid[y][x];
+                
+                // Garde les murs extérieurs intacts
+                // Crée des murs intérieurs aléatoires (33% de chance)
+                cell.walls.top = (y === 0) ? true : Math.random() < 0.33;
+                cell.walls.right = (x === this.width - 1) ? true : Math.random() < 0.33;
+                cell.walls.bottom = (y === this.height - 1) ? true : Math.random() < 0.33;
+                cell.walls.left = (x === 0) ? true : Math.random() < 0.33;
+
+                // Synchroniser les murs avec les cellules adjacentes
+                if (y > 0) {
+                    this.grid[y-1][x].walls.bottom = cell.walls.top;
+                }
+                if (x > 0) {
+                    this.grid[y][x-1].walls.right = cell.walls.left;
+                }
+            }
+        }
+        
+        // Crée une entrée et une sortie
+        this.start.walls.right = false;
+        this.grid[0][1].walls.left = false;
+        this.end.walls.left = false;
+        this.grid[this.height-1][this.width-2].walls.right = false;
+    }
 
     // =======================
     // ===== Utilitaires =====
@@ -223,6 +263,13 @@ export class Maze {
         if(this.player) this.player.setPosition(this.start.x, this.start.y);
         if(this.aiPlayer) this.aiPlayer.setPosition(this.start.x, this.start.y);
         
+        this.resetPath();
+    }
+
+    /**
+     * Réinitialise les chemins
+     */
+    resetPath(){
         // Enlever tous les chemins
         this.grid.forEach(row => {
             row.forEach(cell => {

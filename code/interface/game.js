@@ -15,11 +15,13 @@ const ranking = document.getElementById('ranking');
 const bestTimesContainer = document.getElementById('best-times');
 const difficultySelector = document.getElementById('difficulty-selector');
 const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+const generationTypeSelect = document.getElementById('generation-type');
 
 // Messages de succès et de défaite
 const successMessage = document.getElementById('success-message');
 const successTime = document.getElementById('success-time');
 const defeatMessage = document.getElementById('defeat-message');
+const noPathMessage = document.getElementById('no-path-message');
 
 let gameMode; // 'speedrun' ou 'vsai'
 
@@ -116,6 +118,7 @@ function resetTimer() {
 function generateNewMaze() {
     // Réinitialiser le timer
     resetTimer();
+    stopAIMovement();
 
     // Vérifier la taille du labyrinthe
     const size = parseInt(mazeSizeInput.value);
@@ -127,9 +130,12 @@ function generateNewMaze() {
     // Afficher les meilleurs temps pour cette taille
     displayBestTimes(size);
 
+    // Récupérer le type de génération sélectionné
+    const generationType = generationTypeSelect.value;
+
     // Créer le joueur et le labyrinthe
     player = new Player('Joueur 1');
-    maze = new Maze(size, size);
+    maze = new Maze(size, size, generationType);
 
     // Ajouter le joueur au labyrinthe
     maze.addPlayer(player, maze.getStartCell());
@@ -154,20 +160,30 @@ function applyAlgorithm() {
         return;
     }
 
+    // Réinitialiser le chemin actuel
+    maze.resetPath();
+
     // Vérifier l'algorithme sélectionné
     const selectedAlgo = algoSelect.value;
+    let path = null;
+
     if (selectedAlgo === 'dfs') {
-        dfs(maze);
-        console.log('dfs');
-    } if (selectedAlgo === 'aStar') {
-        aStar(maze);
-        console.log('aStar');
+        path = dfs(maze);
+    } else if (selectedAlgo === 'aStar') {
+        path = aStar(maze);
     } else {
-        bfs(maze);
-        console.log('bfs');
+        path = bfs(maze);
     }
 
-    // Afficher le labyrinthe
+    // Vérifier si un chemin a été trouvé
+    if (!path) {
+        noPathMessage.classList.remove('hidden');
+        // Cacher le message après 3 secondes
+        setTimeout(() => {
+            noPathMessage.classList.add('hidden');
+        }, 3000);
+    }
+
     maze.renderMaze(mazeContainer);
 }
 
@@ -348,44 +364,64 @@ function applyCustomColors() {
 function startAIMovement() {
     if (!maze.aiPlayer) return;
 
-    // Calculer le chemin initial vers la sortie
-    const aiPath = bfs(maze);
-    maze.hidePath();
-    let pathIndex = 0;
-
-    // Calculer les directions à l'avance
-    const directions = aiPath.slice(0, -1).map((current, i) => {
-        const next = aiPath[i + 1];
-        if (next.row < current.row) return 'up';
-        if (next.row > current.row) return 'down';
-        if (next.col < current.col) return 'left';
-        return 'right';
-    });
-
-    // Déplacer l'IA tous les x temps
-    aiInterval = setInterval(() => {
-        if (pathIndex < directions.length) {
-            maze.movePlayer(maze.aiPlayer, directions[pathIndex]);
-            maze.renderMaze(mazeContainer);
-            pathIndex++;
-
-            // Vérifier si l'IA a gagné
-            if (maze.isAIFinished()) {
-                // Arrêter le jeu
-                stopAIMovement();
-                clearInterval(timerInterval);
-
-                // Afficher le message de défaite
-                defeatMessage.classList.remove('hidden');
-
-                // Faire disparaître le message après 3 secondes
-                setTimeout(() => {
-                    defeatMessage.classList.add('hidden');
-                    restartGame();
-                }, 3000);
-            }
+    // Créer une copie du labyrinthe pour l'IA
+    // Obligatoire pour éviter de supprimer la recherche de chemin actuelle
+    const aiMaze = new Maze(maze.width, maze.height, generationTypeSelect.value);
+    // Copier l'état des murs du labyrinthe principal
+    for (let y = 0; y < maze.height; y++) {
+        for (let x = 0; x < maze.width; x++) {
+            aiMaze.grid[y][x].walls = {...maze.grid[y][x].walls};
         }
-    }, aiDifficultyInterval);
+    }
+
+    // Calculer le chemin avec A* sur la copie du labyrinthe
+    const aiPath = aStar(aiMaze);
+
+    console.log(aiPath);
+
+    if (aiPath !== null) {
+        let pathIndex = 0;
+
+        // Calculer les directions à l'avance
+        const directions = aiPath.slice(0, -1).map((current, i) => {
+            const next = aiPath[i + 1];
+            if (next.y < current.y) return 'up';
+            if (next.y > current.y) return 'down';
+            if (next.x < current.x) return 'left';
+            return 'right';
+        });
+
+        // Déplacer l'IA tous les x temps
+        aiInterval = setInterval(() => {
+            if (pathIndex < directions.length) {
+                maze.movePlayer(maze.aiPlayer, directions[pathIndex]);
+                maze.renderMaze(mazeContainer);
+                pathIndex++;
+
+                // Vérifier si l'IA a gagné
+                if (maze.isAIFinished()) {
+                    // Arrêter le jeu
+                    stopAIMovement();
+                    clearInterval(timerInterval);
+
+                    // Afficher le message de défaite
+                    defeatMessage.classList.remove('hidden');
+
+                    // Faire disparaître le message après 3 secondes
+                    setTimeout(() => {
+                        defeatMessage.classList.add('hidden');
+                        restartGame();
+                    }, 3000);
+                }
+            }
+        }, aiDifficultyInterval);
+    } else {
+        noPathMessage.classList.remove('hidden');
+        // Cacher le message après 3 secondes
+        setTimeout(() => {
+            noPathMessage.classList.add('hidden');
+        }, 3000);
+    }
 }
 
 /**
@@ -433,3 +469,16 @@ difficultyBtns.forEach(btn => {
 generateButton.addEventListener('click', generateNewMaze);
 applyAlgoButton.addEventListener('click', applyAlgorithm);
 restartButton.addEventListener('click', restartGame);
+
+// Ajouter un écouteur pour fermer le message en cliquant dessus
+noPathMessage.addEventListener('click', () => {
+    noPathMessage.classList.add('hidden');
+});
+
+successMessage.addEventListener('click', () => {
+    successMessage.classList.add('hidden');
+});
+
+defeatMessage.addEventListener('click', () => {
+    defeatMessage.classList.add('hidden');
+});

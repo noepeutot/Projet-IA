@@ -5,7 +5,7 @@ function testMaze() {
     // Créer un labyrinthe de test
     const width = 4;
     const height = 4;
-    const maze = new Maze(width, height);
+    const maze = new Maze(width, height, "recursive");
 
     console.log('Labyrinthe généré :');
     maze.displayMaze();
