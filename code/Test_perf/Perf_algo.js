@@ -1,45 +1,111 @@
-import { aStar } from '../algorithms/aStar.js';
-import { dfs } from '../algorithms/dfs.js';
-import { bfs } from '../algorithms/bfs.js';
+import { aStarPerf } from './aStarPerf.js';
+import { dfsPerf } from './dfsPerf.js';
+import { bfsPerf } from './bfsPerf.js';
 
 import { Maze } from '../classes/Maze.js';
 
-function testPerformance(algorithm, size) {
-    const nbIterations = 100;
-    let totalTime = 0;
-    let totalMemoryUsed = 0;
+function testPerformance(size) {
+    const nbIterations = 1000;
+    const algo = ["AStar", "DFS", "BFS"];
+
+    let aStarTotalTime = 0;
+    let aStarTotalMemoryUsed = 0;
+    let aStarNodeExplored = 0;
+
+    let dfsTotalTime = 0;
+    let dfsTotalMemoryUsed = 0;
+    let dfsNodeExplored = 0;
+
+    let bfsTotalTime = 0;
+    let bfsTotalMemoryUsed = 0;
+    let bfsNodeExplored = 0;
 
     for (let i = 0; i < nbIterations; i++) {
         const maze = new Maze(size, size);
 
-        if (global.gc()) {
-            global.gc();
+        for (const nameAlgo of algo) {
+            if (global.gc()) {
+                global.gc();
+            }
+            const memoryStart = process.memoryUsage().heapUsed;
+            const start = performance.now();
+    
+            let nbNodesExplored;
+            let end;
+            let memoryEnd;
+            switch (nameAlgo) {
+                case "AStar" :
+                    nbNodesExplored = aStarPerf(maze);
+
+                    end = performance.now();
+                    if (global.gc()) {
+                        global.gc();
+                    }
+                    memoryEnd = process.memoryUsage().heapUsed;
+            
+                    aStarTotalTime += end - start;
+                    aStarTotalMemoryUsed += memoryEnd - memoryStart;
+                    aStarNodeExplored += nbNodesExplored;           
+
+                    break;
+                case "DFS" :
+                    nbNodesExplored = dfsPerf(maze);
+
+                    end = performance.now();
+                    if (global.gc()) {
+                        global.gc();
+                    }
+                    memoryEnd = process.memoryUsage().heapUsed;
+            
+                    dfsTotalTime += end - start;
+                    dfsTotalMemoryUsed += memoryEnd - memoryStart;
+                    dfsNodeExplored += nbNodesExplored;            
+                    
+                    break;
+                case "BFS" :
+                    nbNodesExplored = bfsPerf(maze);
+
+                    end = performance.now();
+                    if (global.gc()) {
+                        global.gc();
+                    }
+                    memoryEnd = process.memoryUsage().heapUsed;
+            
+                    bfsTotalTime += end - start;
+                    bfsTotalMemoryUsed += memoryEnd - memoryStart;
+                    bfsNodeExplored += nbNodesExplored;            
+
+                    break;
+            }
+    
+
+            maze.resetMaze();
+
         }
-        const memoryStart = process.memoryUsage().heapUsed;
-        const start = performance.now();
 
-        algorithm(maze); // Exécuter l'algorithme
-
-        const end = performance.now();
-        if (global.gc()) {
-            global.gc();
-        }
-        const memoryEnd = process.memoryUsage().heapUsed;
-
-        totalTime += end - start;
-        totalMemoryUsed += memoryEnd - memoryStart;
     }
 
     return {
-        meanTime: totalTime / nbIterations, // Temps moyen en ms
-        meanMemoryUsed: (totalMemoryUsed / nbIterations) / 1024 // Mémoire utilisée en o
+        "AStar" : {
+            meanTime: aStarTotalTime / nbIterations, // Temps moyen en ms
+            meanMemoryUsed: (aStarTotalMemoryUsed / nbIterations) / 1024, // Mémoire utilisée en o
+            meanNodeExplored: aStarNodeExplored / nbIterations // Nombre de noeuds explorés en moyenne
+        },
+        "DFS" : {
+            meanTime: dfsTotalTime / nbIterations, // Temps moyen en ms
+            meanMemoryUsed: (dfsTotalMemoryUsed / nbIterations) / 1024, // Mémoire utilisée en o
+            meanNodeExplored: dfsNodeExplored / nbIterations // Nombre de noeuds explorés en moyenne
+        },
+        "BFS" : {
+            meanTime: bfsTotalTime / nbIterations, // Temps moyen en ms
+            meanMemoryUsed: (bfsTotalMemoryUsed / nbIterations) / 1024, // Mémoire utilisée en o
+            meanNodeExplored: bfsNodeExplored / nbIterations // Nombre de noeuds explorés en moyenne
+        }
     };
 }
 
 const mazeSizes = [10, 50, 100];
 mazeSizes.forEach(size => {
     console.log(`Testing on maze size ${size}x${size}:`);
-    console.log('aStar algorithm', testPerformance(aStar, size));
-    console.log('dfs algorithm', testPerformance(dfs, size));
-    console.log('bfs algorithm', testPerformance(bfs, size));
+    console.log(testPerformance(size));
 });
