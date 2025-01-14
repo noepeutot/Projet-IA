@@ -3,7 +3,7 @@ import { reconstructPath } from "../algorithms/path.js";
 /**
  * Algorithme de recherche en profondeur (Depth-First Search)
  * @param {Maze} maze - Labyrinthe
- * @returns {Array} Chemin trouvé
+ * @returns {int} Nombre de cases parcourues
  */
 export function dfsPerf(maze) {
     let nbNodesExplored = 0;

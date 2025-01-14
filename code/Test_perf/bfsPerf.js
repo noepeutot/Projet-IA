@@ -3,7 +3,7 @@ import { reconstructPath } from "../algorithms/path.js";
 /**
  * Algorithme de recherche en largeur (Breadth-First Search)
  * @param {Maze} maze - Labyrinthe
- * @returns {Array} Chemin trouvé
+ * @returns {int} Nombre de cases parcourues
  */
 export function bfsPerf(maze) {
     let nbNodesExplored = 0;
@@ -41,6 +41,8 @@ export function bfsPerf(maze) {
             path.forEach(pos => {
                 maze.grid[pos.y][pos.x].setType("path");
             });
+
+            return nbNodesExplored;
         } else {
             // Vérifier si la cellule voisine en haut est valide et non visitée et ajouter à la file et ajouter le parent
             if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited()) {

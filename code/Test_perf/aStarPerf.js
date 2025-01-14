@@ -1,102 +1,110 @@
 export function aStarPerf(maze) {
-  let nbNodesExplored = 0;
+    let nbNodesExplored = 0;
 
-  // 1. Créer un ensemble ordonnées par f(n) qui contient les nœuds découverts, mais pas encore explorés
-  let open = [];
-  // 2. Créer un ensemble contenant les nœuds déjà explorés
-  let closed = [];
+    // 1. Créer un ensemble ordonné par f(n) qui contient les nœuds découverts, mais pas encore explorés
+    let open = [];
+    // 2. Créer un ensemble contenant les nœuds déjà explorés
+    let closed = new Set();  // Utilisation d'un Set pour une recherche plus efficace
 
-  const startCell = maze.getStartCell(); // n0 (nœud de départ)
-  const endCell = maze.getEndCell(); // nG (noeud de fin)
+    const startCell = maze.getStartCell(); // n0 (nœud de départ)
+    const endCell = maze.getEndCell(); // nG (noeud de fin)
 
-  // 3. Insérer n0 dans l'open
-  startCell.cout = 0; // g(n0) = 0 car c'est le départ
-  startCell.heuristique = maze.getDistanceBetweenCells(startCell, endCell); // h(n0) = distance entre n0 et nG
-  startCell.value = startCell.cout + startCell.heuristique; // f(n0) = g(n0) + h(n0) = 0 + distance entre n0 et nG
-  open.push(startCell);
+    // Initialiser toutes les cellules
+    maze.grid.forEach(row => {
+        row.forEach(cell => {
+            cell.cout = Infinity;      // g(n)
+            cell.heuristique = Infinity; // h(n)
+            cell.value = Infinity;     // f(n)
+            cell.parent = null;
+        });
+    });
 
-  // 4 + 5. Boucle principale. Tant qu'open n'est pas vide et que nG n'est pas dans closed
-  while (open.length > 0 && !closed.includes(endCell)) {
+    // 3. Insérer n0 dans l'open avec les valeurs initiales
+    startCell.cout = 0; // g(n0) = 0 car c'est le départ
+    startCell.heuristique = maze.getDistanceBetweenCells(startCell, endCell); // h(n0) = distance entre n0 et nG
+    startCell.value = startCell.cout + startCell.heuristique; // f(n0) = g(n0) + h(n0) = 0 + distance entre n0 et nG
+    open.push(startCell);
 
-      // 6. Sélectionner n1 = nœud avec le plus petit f(n) dans open
-      open.sort((a, b) => a.value - b.value);
+    // 4 + 5. Boucle principale. Tant qu'open n'est pas vide et que nG n'est pas dans closed
+    while (open.length > 0 && !closed.has(endCell)) {
+        // 6. Sélectionner n1 = nœud avec le plus petit f(n) dans open
+        open.sort((a, b) => a.value - b.value);
 
-      // 7. Enlever n1 de open et l'ajouter dans closed
-      const current = open.shift();
-      nbNodesExplored++;
-      closed.push(current);
+        // 7. Enlever n1 de open et l'ajouter dans closed
+        const current = open.shift();
+        nbNodesExplored++;
+        closed.add(current);
 
-      // 8. Si n1 est le but, reconstruire le chemin et sortir de la boucle
-      if (current === endCell) {
-          let path = [];
-          let pathCell = current;
-          while (pathCell !== startCell) {
-              if (pathCell !== endCell) {
-                  pathCell.setType("path");
-                  path.unshift(pathCell);
-              }
-              pathCell = pathCell.parent;
-          }
-          path.unshift(startCell);
-          return nbNodesExplored;
-      }
+        // 8. Si n1 est le but, reconstruire le chemin et sortir de la boucle
+        if (current === endCell) {
+            // Tableau qui contiendra le chemin
+            let path = [];
+            // Cellule courante pour reconstruire le chemin
+            let pathCell = current;
+            // Tant qu'on n'est pas arrivé à la cellule de départ
+            while (pathCell !== startCell) {
+                path.unshift({x: pathCell.x, y: pathCell.y});
+                pathCell = pathCell.parent;
+            }
 
-      // Définir les directions possibles
-      const directions = [
-          {dx: -1, dy: 0, wall: 'left'},
-          {dx: 0, dy: -1, wall: 'top'},
-          {dx: 1, dy: 0, wall: 'right'},
-          {dx: 0, dy: 1, wall: 'bottom'}
-      ];
+            // Ajouter la cellule de départ
+            path.unshift({x: startCell.x, y: startCell.y});
 
-      // 9. Pour chaque nœud successeur n2 de n1
-      for (const dir of directions) {
-          // Définir les coordonnées du successeur
-          const newX = current.x + dir.dx;
-          const newY = current.y + dir.dy;
+            // Marquer le chemin
+            path.forEach(pos => {
+                maze.grid[pos.y][pos.x].setType("path");
+            });
 
-          // Vérifier si le successeur est dans la grille et si la direction n'est pas bloquée
-          if (newX >= 0 && newX < maze.width &&
-              newY >= 0 && newY < maze.height &&
-              !current.walls[dir.wall]) {
+            return nbNodesExplored;
+        }
 
-              // Définir le successeur
-              const successor = maze.grid[newY][newX];
+        // Définir les directions possibles
+        const directions = [
+            { dx: -1, dy: 0, wall: 'left' },
+            { dx: 0, dy: -1, wall: 'top' },
+            { dx: 1, dy: 0, wall: 'right' },
+            { dx: 0, dy: 1, wall: 'bottom' }
+        ];
 
-              // 10. Initialiser g(n2) = g(n1) + coût de la transition
-              const newCost = current.cout + 1;
+        // 9. Pour chaque nœud successeur n2 de n1
+        for (const dir of directions) {
+            // Définir les coordonnées du successeur
+            const newX = current.x + dir.dx;
+            const newY = current.y + dir.dy;
 
-              // 11. Définir le parent de n2
-              if (successor !== current.parent) {
-                  successor.parent = current;
-              }
+            // Vérifier si le successeur est dans la grille et si la direction n'est pas bloquée
+            if (newX >= 0 && newX < maze.width &&
+                newY >= 0 && newY < maze.height &&
+                !current.walls[dir.wall]) {
 
-              // Calculer les valeurs pour n2
-              successor.cout = newCost;
-              successor.heuristique = maze.getDistanceBetweenCells(successor, endCell);
-              successor.value = successor.cout + successor.heuristique;
+                // Définir le successeur
+                const successor = maze.grid[newY][newX];
 
-              // 12. Vérifier si n2 existe dans l'open ou closed avec un f(n) plus grand
-              // On cherche n2 dans l'open et dans closed
-              const existingInOpen = open.find(n => n === successor);
-              const existingInClosed = closed.find(n => n === successor);
+                // 10. Initialiser g(n2) = g(n1) + coût de la transition
+                const newCost = current.cout + 1;
 
-              // 12.1. Si n2 existe dans l'open et que son f(n) est plus grand que le f(n) de n2
-              if (existingInOpen && successor.value < existingInOpen.value) {
-                  open = open.filter(n => n !== existingInOpen); // On enlève n2 de l'open
-                  open.push(successor); // On ajoute n2 à l'open
-              } 
-              // 12.2. Si n2 existe dans closed et que son f(n) est plus grand que le f(n) de n2
-              else if (existingInClosed && successor.value < existingInClosed.value) {
-                  closed = closed.filter(n => n !== existingInClosed); // On enlève n2 de closed
-                  open.push(successor); // On ajoute n2 à l'open
-              } 
-              // 13 & 14. Si n2 n'est ni dans l'open ni dans closed
-              else if (!existingInOpen && !existingInClosed) {
-                  open.push(successor); // On ajoute n2 à l'open
-              }
-          }
-      }
-  }
-  return nbNodesExplored;
+                // Si le successeur n'est pas dans closed OU si on trouve un meilleur chemin
+                if (!closed.has(successor) || newCost < successor.cout) {
+                    // 11. Mettre à jour les valeurs du successeur
+                    successor.cout = newCost;
+                    successor.heuristique = maze.getDistanceBetweenCells(successor, endCell);
+                    successor.value = successor.cout + successor.heuristique;
+                    successor.parent = current;
+
+                    // 12. Si le successeur était dans closed, le retirer
+                    if (closed.has(successor)) {
+                        closed.delete(successor);
+                    }
+
+                    // 13. Si le successeur n'est pas dans open, l'ajouter
+                    if (!open.includes(successor)) {
+                        open.push(successor);
+                    }
+                }
+            }
+        }
+    }
+
+    // Si aucun chemin n'est trouvé
+    return nbNodesExplored;
 }
