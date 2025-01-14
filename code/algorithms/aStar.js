@@ -34,6 +34,7 @@ export function aStar(maze) {
                 path.unshift({x: pathCell.x, y: pathCell.y});
                 pathCell = pathCell.parent;
             }
+
             // Ajouter la cellule de départ
             path.unshift({x: startCell.x, y: startCell.y});
 

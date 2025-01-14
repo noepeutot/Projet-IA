@@ -31,6 +31,7 @@ export function dfs(maze) {
 
         // Si la cellule est la cellule de fin
         if (maze.grid[y][x] === maze.getEndCell()) {
+
             // Reconstruire le chemin
             path = reconstructPath(parents, startCell, { x, y });
 
@@ -40,6 +41,7 @@ export function dfs(maze) {
             });
 
             return path;
+
         } else {
             // Vérifier le mur du haut et ajouter la cellule voisine dans la pile et ajouter le parent
             if (y > 0 && !maze.grid[y][x].walls.top && !maze.grid[y - 1][x].isVisited()) {
