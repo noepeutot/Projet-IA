@@ -2,7 +2,7 @@
 
 ## Installation
 
-Pour installer MazeRunner, veuillez télécharger l'archive zip de la branche main du répertoire. Extrayez-la à l'endroit que vous souhaité.
+Pour installer MazeRunner, veuillez télécharger l'archive zip de la branche `dev` du répertoire. Extrayez-la à l'endroit que vous souhaité.
 
 ## Lancement
 
