@@ -36,7 +36,7 @@ class MockMaze {
     }
 
     getEndCell() {
-        return this.grid[this.end.row][this.end.col];
+        return this.grid[this.end.y][this.end.x];
     }
 
     displayMaze() {
@@ -62,7 +62,7 @@ function testBfs () {
     grid[0][1].walls.bottom = true; // Mur entre (0,1) et (1,1)
 
     const start = { x: 0, y: 0 }; // Point de départ
-    const end = { row: 2, col: 2 }; // Point d'arrivée
+    const end = { x: 2, y: 2 }; // Point d'arrivée
 
     const maze = new MockMaze(grid, start, end);
 
@@ -78,11 +78,11 @@ function testBfs () {
     // Vérifier que le chemin trouvé est correct
     console.assert(path !== null, 'Aucun chemin trouvé, ce qui est incorrect.');
     console.assert(
-        path.length > 0 && path[0].row === start.y && path[0].col === start.x,
+        path.length > 0 && path[0].x === start.x && path[0].y === start.y,
         'Le chemin doit commencer au point de départ.'
     );
     console.assert(
-        path[path.length - 1].row === end.row && path[path.length - 1].col === end.col,
+        path[path.length - 1].x === end.x && path[path.length - 1].y === end.y,
         'Le chemin doit se terminer au point d\'arrivée.'
     );
 

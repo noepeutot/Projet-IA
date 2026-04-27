@@ -6,7 +6,7 @@ export class Maze {
         this.height = height; // Hauteur du labyrinthe
         this.grid = this.createGrid(); // Grille de cellules
         this.stack = []; // Pile pour l'algorithme de backtracking
-        this.currentCell = this.grid[this.getRandomInt(width)][this.getRandomInt(height)]; // Cellule de départ aléatoire
+        this.currentCell = this.grid[this.getRandomInt(height)][this.getRandomInt(width)]; // Cellule de départ aléatoire
         this.visitedCells = 0; // Nombre de cellules visitées
         this.totalCells = width * height; // Nombre total de cellules
         this.setStartCell(this.grid[0][0]); // Cellule de départ du labyrinthe

@@ -121,7 +121,7 @@ function generateNewMaze() {
     stopAIMovement();
 
     // Vérifier la taille du labyrinthe
-    const size = parseInt(mazeSizeInput.value);
+    const size = parseInt(mazeSizeInput.value, 10);
     if (size < 5 || size > 30) {
         alert('La taille doit être comprise entre 5 et 30');
         return;
@@ -376,8 +376,6 @@ function startAIMovement() {
 
     // Calculer le chemin avec A* sur la copie du labyrinthe
     const aiPath = aStar(aiMaze);
-
-    console.log(aiPath);
 
     if (aiPath !== null) {
         let pathIndex = 0;
