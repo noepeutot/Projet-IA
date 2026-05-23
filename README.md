@@ -2,6 +2,33 @@
 
 Jeu de labyrinthe avec génération procédurale (Recursive Backtracking, Random, Prim, Kruskal) et résolution algorithmique (BFS, DFS, A\*, Dijkstra).
 
+## Aperçu
+
+![Démo](assets/screenshots/demo.gif)
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/screenshots/home.png" alt="Page d'accueil" width="400"><br>
+      <sub>Page d'accueil</sub>
+    </td>
+    <td align="center">
+      <img src="assets/screenshots/rules.png" alt="Règles" width="400"><br>
+      <sub>Règles du jeu</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="assets/screenshots/game.png" alt="Page de jeu" width="400"><br>
+      <sub>Partie en cours</sub>
+    </td>
+    <td align="center">
+      <img src="assets/screenshots/ai.png" alt="Mode IA" width="400"><br>
+      <sub>Mode contre l'IA</sub>
+    </td>
+  </tr>
+</table>
+
 ## Prérequis
 
 Node.js 20 ou supérieur. Aucune dépendance à installer — le projet fonctionne en JS vanilla.
