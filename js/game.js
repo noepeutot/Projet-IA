@@ -546,4 +546,4 @@ defeatMessage.addEventListener('click', () => dismissModal(defeatMessage));
 pauseResumeBtn.addEventListener('click', resumeGame);
 pauseRestartBtn.addEventListener('click', () => restartGame());
 pauseNewBtn.addEventListener('click', () => generateNewMaze());
-pauseHomeBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+pauseHomeBtn.addEventListener('click', () => { window.location.href = '/'; });
