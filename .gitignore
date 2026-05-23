@@ -1,1 +1,14 @@
 .idea
+.claude/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+
+# Node
+node_modules/

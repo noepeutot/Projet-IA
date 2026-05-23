@@ -1,0 +1,11 @@
+{
+    "name": "maze-runner",
+    "version": "1.0.0",
+    "description": "Jeu de labyrinthe avec génération procédurale et résolution algorithmique (BFS, DFS, A*, Dijkstra)",
+    "type": "module",
+    "scripts": {
+        "start": "npx serve .",
+        "demo": "node cli-demo.js",
+        "bench": "node --expose-gc benchmarks/run.js"
+    }
+}

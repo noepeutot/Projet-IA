@@ -1,0 +1,313 @@
+/* ============================================================
+   MazeRunner — Composants réutilisables
+   Direction : pierre Minecraft sobre, bevel pixel à 3 ombres
+   ============================================================ */
+
+/* ─── BOUTON pierre MC ─── */
+.btn-mc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    padding: 10px 20px;
+    min-height: 38px;
+
+    font-family: var(--font-pixel);
+    font-size: var(--fs-5);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 2px 2px 0 #3f3f3f;
+    text-transform: uppercase;
+
+    background-color: var(--c-stone-btn);
+    background-image: none;
+    border: none;
+    box-shadow: var(--bevel-btn-out);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+
+    transition: filter 80ms steps(2, end), background-color 80ms steps(2, end);
+}
+
+.btn-mc:hover {
+    filter: brightness(1.15);
+    background-color: var(--c-stone-btn-hover);
+}
+
+.btn-mc:active {
+    box-shadow: var(--bevel-btn-in);
+    transform: translateY(1px);
+}
+
+.btn-mc:focus-visible {
+    box-shadow: var(--bevel-btn-out), 0 0 0 4px var(--c-gold);
+}
+
+/* ─── Variantes (accents) ─── */
+.btn-mc--emerald {
+    background-color: var(--c-accent-green);
+    box-shadow:
+        inset -2px -4px 0 0 var(--c-accent-green-dark),
+        inset 2px 2px 0 0 var(--c-accent-green-light),
+        0 0 0 2px #1a1a1a;
+}
+.btn-mc--emerald:hover { background-color: var(--c-accent-green-hover); }
+.btn-mc--emerald:active {
+    box-shadow:
+        inset 2px 4px 0 0 var(--c-accent-green-dark),
+        inset -2px -2px 0 0 var(--c-accent-green-light),
+        0 0 0 2px #1a1a1a;
+}
+
+.btn-mc--gold {
+    background-color: var(--c-accent-yellow);
+    box-shadow:
+        inset -2px -4px 0 0 var(--c-accent-yellow-dark),
+        inset 2px 2px 0 0 var(--c-accent-yellow-light),
+        0 0 0 2px #1a1a1a;
+}
+.btn-mc--gold:hover { background-color: var(--c-accent-yellow-hover); }
+.btn-mc--gold:active {
+    box-shadow:
+        inset 2px 4px 0 0 var(--c-accent-yellow-dark),
+        inset -2px -2px 0 0 var(--c-accent-yellow-light),
+        0 0 0 2px #1a1a1a;
+}
+
+/* ─── Tailles ─── */
+.btn-mc--sm {
+    padding: 8px 14px;
+    min-height: 30px;
+    font-size: var(--fs-6);
+}
+.btn-mc--lg {
+    padding: 14px 20px;
+    min-height: 50px;
+    font-size: var(--fs-4);
+}
+.btn-mc--block {
+    display: flex;
+    width: 100%;
+}
+
+/* ─── Boutons icône (carrés, glyphe agrandi) ─── */
+.btn-mc--icon {
+    padding: 8px 12px;
+    min-width: 44px;
+    min-height: 38px;
+    line-height: 1;
+}
+.btn-mc--icon.btn-mc--sm {
+    padding: 6px 10px;
+    min-width: 40px;
+    min-height: 34px;
+}
+
+.btn-mc__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1.4em;          /* relatif au bouton parent */
+    text-shadow: inherit;
+    /* L'icône reste alignée verticalement avec le label texte qui suit */
+}
+.btn-mc--icon .btn-mc__icon {
+    font-size: 1.6em;          /* glyphe encore plus marqué quand seul dans le bouton */
+}
+
+/* ─── PANEL semi-transparent ─── */
+.panel-mc {
+    background: var(--c-panel);
+    border: 2px solid var(--c-panel-border);
+    box-shadow: var(--bevel-panel);
+    color: #fff;
+    padding: var(--s-4);
+}
+
+.panel-mc__section {
+    padding: var(--s-2) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+}
+
+.panel-mc__section-title {
+    font-family: var(--font-pixel);
+    font-size: var(--fs-6);
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--c-gold);
+    text-shadow: 1px 1px 0 var(--c-gold-shadow);
+    text-transform: uppercase;
+    margin: 0 0 var(--s-1);
+}
+.panel-mc__section-title::before {
+    content: '◆ ';
+    color: var(--c-gold);
+}
+
+.panel-mc__label {
+    font-family: var(--font-pixel);
+    font-size: var(--fs-7);
+    color: var(--c-label-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--s-1);
+    display: block;
+}
+
+/* ─── INPUT ─── */
+.input-mc {
+    width: 100%;
+    padding: 8px 10px;
+    min-height: 32px;
+
+    font-family: var(--font-pixel);
+    font-size: var(--fs-6);
+    color: var(--c-text);
+
+    background: #1a1a1a;
+    border: none;
+    box-shadow: var(--bevel-input);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.input-mc:focus {
+    box-shadow: var(--bevel-input-focus);
+}
+
+.input-mc:focus-visible {
+    outline: 2px solid var(--c-accent-green);
+    outline-offset: 2px;
+}
+
+/* ─── SELECT ─── */
+.select-mc {
+    width: 100%;
+    padding: 8px 28px 8px 10px;
+    min-height: 32px;
+
+    font-family: var(--font-pixel);
+    font-size: var(--fs-6);
+    color: var(--c-text);
+
+    background-color: #333;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #aaa 50%),
+        linear-gradient(-45deg, transparent 50%, #aaa 50%);
+    background-position:
+        calc(100% - 14px) center,
+        calc(100% - 8px) center;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+
+    border: none;
+    box-shadow:
+        inset -2px -2px 0 0 #222,
+        inset 1px 1px 0 0 #555,
+        0 0 0 2px #111;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.select-mc:focus {
+    box-shadow:
+        inset -2px -2px 0 0 #222,
+        inset 1px 1px 0 0 #555,
+        0 0 0 2px var(--c-accent-green);
+}
+
+.select-mc:focus-visible {
+    outline: 2px solid var(--c-accent-green);
+    outline-offset: 2px;
+}
+
+.select-mc option {
+    background: #333;
+    color: var(--c-text);
+}
+
+/* ─── MODAL ─── */
+.modal-mc {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: modal-fade-in 240ms steps(4, end);
+}
+
+.modal-mc__content {
+    min-width: 320px;
+    max-width: 90vw;
+    padding: var(--s-6);
+
+    background: var(--c-panel);
+    border: 2px solid var(--c-panel-border);
+    box-shadow: var(--bevel-panel), 0 16px 0 rgba(0, 0, 0, 0.5), 0 32px 64px rgba(0, 0, 0, 0.7);
+
+    text-align: center;
+    animation: modal-pop-in 320ms steps(8, end);
+}
+
+.modal-mc__title {
+    font-family: var(--font-pixel);
+    font-size: var(--fs-2);
+    font-weight: 700;
+    margin: 0 0 var(--s-3);
+    color: var(--c-gold);
+    text-shadow: 2px 2px 0 var(--c-gold-shadow);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.modal-mc__title--danger { color: var(--c-redstone); text-shadow: 2px 2px 0 #4a1010; }
+.modal-mc__title--warn   { color: var(--c-gold);     text-shadow: 2px 2px 0 var(--c-gold-shadow); }
+
+.modal-mc__text {
+    font-family: var(--font-pixel);
+    font-size: var(--fs-5);
+    color: var(--c-text);
+    margin: 0 0 var(--s-3);
+}
+
+@keyframes modal-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes modal-pop-in {
+    0%   { transform: scale(0.6) translateY(20px); opacity: 0; }
+    50%  { transform: scale(1.05) translateY(0);    opacity: 1; }
+    100% { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+/* ─── BACK BUTTON commun ─── */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+}
+
+/* ─── SCROLLBAR pixel ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track {
+    background: #111;
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+/* ─── Utilitaires ─── */
+.hidden { display: none !important; }

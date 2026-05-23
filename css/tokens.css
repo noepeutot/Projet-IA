@@ -1,0 +1,179 @@
+/* ============================================================
+   MazeRunner — Design Tokens
+   Direction artistique : pixel sobre, nuit atmosphérique inspirée Minecraft
+   ============================================================ */
+
+@font-face {
+    font-family: 'Monocraft';
+    src: url('../assets/fonts/Monocraft.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Monocraft';
+    src: url('../assets/fonts/Monocraft-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* ─── Fonds ─── */
+    --c-bg-deep:   #0a0a0f;       /* Fond global menu */
+    --c-bg-game:   #111;          /* Fond plat game */
+    --c-bg-topbar: #1a1a1a;       /* Top bar du jeu */
+    --c-panel:     rgba(0, 0, 0, 0.72); /* Panneaux semi-transparents */
+    --c-panel-border: #1a1a1a;
+    --c-overlay:   rgba(0, 0, 0, 0.35); /* Overlay paysage */
+
+    /* ─── Boutons pierre Minecraft ─── */
+    --c-stone-btn:        #8b8b8b;
+    --c-stone-btn-light:  #d4d4d4;
+    --c-stone-btn-dark:   #373737;
+    --c-stone-btn-hover:  #9b9b9b;
+
+    /* ─── Accents (parcimonieux) ─── */
+    --c-accent-green:        #5a8a2a;
+    --c-accent-green-light:  #8fd040;
+    --c-accent-green-dark:   #2a4a10;
+    --c-accent-green-hover:  #6a9a3a;
+
+    --c-accent-yellow:       #a07820;
+    --c-accent-yellow-light: #e0b848;
+    --c-accent-yellow-dark:  #503c10;
+    --c-accent-yellow-hover: #b08830;
+
+    --c-accent-red:          #8e2c2c;
+    --c-accent-red-light:    #c25555;
+    --c-accent-red-dark:     #4a1010;
+
+    /* ─── Timer LCD ─── */
+    --c-lcd:        #e0e040;
+    --c-lcd-shadow: #505000;
+
+    /* ─── Or (labels, sortie, accents) ─── */
+    --c-gold:        #e0b030;
+    --c-gold-shadow: #6a4800;
+
+    /* ─── Algos (rules screen) ─── */
+    --c-algo-blue:   #5a8aff;     /* DFS */
+    --c-algo-green:  #5cb025;     /* BFS / accents OPTIMAL */
+    --c-algo-purple: #cc5aff;     /* Dijkstra */
+
+    /* ─── IA (mode VS IA) ─── */
+    --c-ia-orange:        #ff6a30;
+    --c-ia-orange-dark:   #aa3a10;
+    --c-ia-orange-shadow: #501800;
+
+    /* ─── Texte ─── */
+    --c-text:        #e0e0e0;
+    --c-label-dim:   #aaa;
+    --c-text-faint:  rgba(255, 255, 255, 0.25);
+
+    /* ─── Couleurs gameplay (sprites + cellules) — conservées ─── */
+    --c-night:       #1A1430;
+    --c-night-light: #2B2148;
+    --c-diamond:     #5DECEB;
+    --c-diamond-dark:#2BB5B5;
+    --c-redstone:    #DA3636;
+    --c-emerald:     #17DD62;
+    --c-iron:        #D8D8D8;
+    --c-iron-dark:   #9A9A9A;
+    --c-copper:      #CD853F;
+    --c-purple:      #A06EF0;
+
+    /* Aliases legacy pour compat (sprites Steve/Creeper, .start portail) */
+
+    /* ─── Typo ─── */
+    --font-pixel: 'Monocraft', 'Press Start 2P', 'Courier New', monospace;
+
+    --fs-display: 56px;
+    --fs-1: 36px;
+    --fs-2: 28px;
+    --fs-3: 22px;
+    --fs-4: 18px;
+    --fs-5: 16px;
+    --fs-6: 14px;
+    --fs-7: 12px;
+
+    /* ─── Espacement ─── */
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 24px;
+    --s-6: 32px;
+    --s-7: 48px;
+    --s-8: 64px;
+
+    /* ─── Bevels pixel — bouton MC : 3 ombres ─── */
+    --bevel-btn-out:
+        inset -2px -4px 0 0 var(--c-stone-btn-dark),
+        inset 2px 2px 0 0 var(--c-stone-btn-light),
+        0 0 0 2px #1a1a1a;
+    --bevel-btn-in:
+        inset 2px 4px 0 0 var(--c-stone-btn-dark),
+        inset -2px -2px 0 0 var(--c-stone-btn-light),
+        0 0 0 2px #1a1a1a;
+
+    --bevel-panel:
+        inset 1px 1px 0 0 #333,
+        inset -1px -1px 0 0 #111;
+
+    --bevel-input:
+        inset 1px 1px 0 0 #444,
+        inset -1px -1px 0 0 #666,
+        0 0 0 2px #111;
+
+    --bevel-input-focus:
+        inset 1px 1px 0 0 #555,
+        inset -1px -1px 0 0 #888,
+        0 0 0 2px var(--c-accent-green);
+
+    --bevel-lcd:
+        inset 1px 1px 0 0 #333,
+        inset -1px -1px 0 0 #000,
+        0 0 0 2px #0a0a0a;
+
+    /* ─── Timing ─── */
+    --ease-step-2: steps(2, end);
+    --ease-step-4: steps(4, end);
+    --ease-step-8: steps(8, end);
+}
+
+/* ─── Reset global pixel-perfect ─── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.maze,
+.cell,
+.player::after,
+.ai-player::after,
+.bg-moon,
+#fx-canvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-pixel);
+    color: var(--c-text);
+    background: var(--c-bg-deep);
+}
+
+::selection {
+    background: var(--c-accent-green);
+    color: #fff;
+}
+
+*:focus-visible {
+    outline: 3px solid var(--c-gold);
+    outline-offset: 2px;
+}

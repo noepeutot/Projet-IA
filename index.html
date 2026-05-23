@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Runner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="bg-pixel" aria-hidden="true">
+        <div class="bg-sky"></div>
+        <div class="bg-stars"></div>
+        <div class="bg-moon"></div>
+        <div class="bg-terrain-wrap">
+            <svg class="bg-terrain-far"></svg>
+            <svg class="bg-terrain-mid"></svg>
+            <svg class="bg-terrain-fg"></svg>
+        </div>
+        <div class="bg-overlay"></div>
+    </div>
+
+    <main class="home">
+        <div class="logo">
+            <span class="logo__subtitle">Pixel Edition !</span>
+            <h1 class="logo__title">
+                <span class="logo__line">Maze</span>
+                <span class="logo__line">Runner</span>
+            </h1>
+        </div>
+
+        <nav class="home__menu">
+            <a href="game.html?mode=speedrun" class="btn-mc btn-mc--lg btn-mc--block btn-mc--emerald">
+                Speedrun
+            </a>
+            <a href="game.html?mode=vsai" class="btn-mc btn-mc--lg btn-mc--block">
+                Joueur VS IA
+            </a>
+            <a href="rules.html" class="btn-mc btn-mc--lg btn-mc--block">
+                Règles
+            </a>
+        </nav>
+
+        <footer class="home__footer">
+            v1.0 · 2024 MIASHS · Projet IA
+        </footer>
+    </main>
+
+    <script src="js/landscape.js"></script>
+</body>
+
+</html>

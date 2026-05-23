@@ -1,0 +1,634 @@
+/* ============================================================
+   MazeRunner — Page d'accueil + Règles
+   Direction : nuit pixelisée atmosphérique inspirée Minecraft
+   ============================================================ */
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    background: var(--c-bg-deep);
+}
+
+/* ─── Fond paysage de nuit ─── */
+.bg-pixel {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.bg-sky {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+        #060612 0%,
+        #0d0820 40%,
+        #1a0e2e 65%,
+        #2a1a18 80%,
+        #1a1208 100%);
+}
+
+.bg-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.bg-moon {
+    position: absolute;
+    right: 12%;
+    top: 10%;
+    width: 40px;
+    height: 40px;
+    background: #dde8ff;
+    box-shadow: 0 0 20px 6px rgba(200, 220, 255, 0.3);
+    clip-path: polygon(
+        20% 0%, 80% 0%,
+        100% 20%, 100% 80%,
+        80% 100%, 20% 100%,
+        0% 80%, 0% 20%
+    );
+}
+
+.bg-terrain-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+}
+.bg-terrain-far,
+.bg-terrain-mid,
+.bg-terrain-fg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--c-overlay);
+    pointer-events: none;
+}
+
+/* ─── Conteneur principal ─── */
+.home {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: var(--s-6) var(--s-4);
+    text-align: center;
+}
+
+/* ─── Logo : sous-titre + titre ─── */
+.logo {
+    text-align: center;
+    margin-bottom: var(--s-6);
+}
+
+.logo__subtitle {
+    display: inline-block;
+    font-family: var(--font-pixel);
+    font-size: var(--fs-6);
+    color: var(--c-gold);
+    text-shadow: 1px 1px 0 var(--c-gold-shadow);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    transform: rotate(-2deg);
+    text-transform: uppercase;
+}
+
+.logo__title {
+    font-family: var(--font-pixel);
+    font-size: var(--fs-display);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+        4px 4px 0 #222,
+        6px 6px 0 #111,
+        -1px -1px 0 #aaa;
+}
+
+.logo__line {
+    display: block;
+}
+
+/* ─── Menu boutons ─── */
+.home__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 320px;
+    max-width: 90vw;
+}
+
+/* ─── Footer ─── */
+.home__footer {
+    position: absolute;
+    bottom: var(--s-5);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: var(--font-pixel);
+    font-size: var(--fs-7);
+    color: var(--c-text-faint);
+    letter-spacing: 2px;
+    z-index: 5;
+}
+
+/* ============================================================
+   Page Règles — Guide tabulaire (Contrôles / Modes / Algos)
+   ============================================================ */
+
+.rules-page {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--s-5) var(--s-6);
+}
+
+/* ─── Header doré ─── */
+.rules-header-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    color: var(--c-gold);
+    text-shadow: 3px 3px 0 #503800, -1px -1px 0 #8a5800;
+    letter-spacing: 2px;
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+/* ─── Panneau central ─── */
+.rules-panel {
+    max-width: 680px;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;          /* override .panel-mc — sections gèrent leur padding */
+}
+
+/* ─── Tab bar ─── */
+.rules-tabs {
+    display: flex;
+    border-bottom: 2px solid #0a0a0a;
+}
+
+.rules-tab {
+    flex: 1;
+    padding: 12px 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: #555;
+    background: #111;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    outline: none;
+    transition: color 100ms, background 100ms;
+}
+
+.rules-tab:hover:not(.rules-tab--active) {
+    color: #888;
+    background: #161616;
+}
+
+.rules-tab:focus-visible {
+    color: var(--c-gold);
+    background: #1a1a1a;
+}
+
+.rules-tab--active {
+    color: var(--c-gold);
+    background: #1a1a1a;
+    border-bottom: 2px solid var(--c-gold);
+    box-shadow: inset 0 -2px 0 0 var(--c-gold);
+}
+
+.rules-tab-panels {
+    padding: 24px;
+}
+
+.rules-tab-panel {
+    display: none;
+}
+
+.rules-tab-panel--active {
+    display: flex;
+    flex-direction: column;
+}
+
+.rules-tab-panel[data-tab="controls"].rules-tab-panel--active { gap: 24px; }
+.rules-tab-panel[data-tab="modes"].rules-tab-panel--active    { gap: 16px; }
+.rules-tab-panel[data-tab="algos"].rules-tab-panel--active    { gap: 10px; }
+
+/* ─── Footer du panneau ─── */
+.rules-panel-footer {
+    border-top: 2px solid #0a0a0a;
+    padding: 12px 24px;
+    background: #0d0d0d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-3);
+}
+
+.rules-back-btn {
+    font-size: 8px;
+    padding: 10px 16px;
+    min-height: 0;
+}
+
+.rules-panel-footer__tag {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+/* ─── Onglet Contrôles : intro ─── */
+.rules-intro {
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #888;
+    line-height: 2;
+    text-align: center;
+}
+
+.rules-intro__note {
+    display: inline-block;
+    margin-top: 6px;
+    color: #555;
+    font-size: 6px;
+    letter-spacing: 1px;
+}
+
+/* ─── Diagramme clavier ─── */
+.keyboard-diagram {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.kbd-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.kbd-group__label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--c-gold);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.kbd-row {
+    display: flex;
+    gap: 4px;
+}
+
+.kbd-hints {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.kbd-hint {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #555;
+    transition: color 80ms;
+}
+
+.kbd-hint--active {
+    color: #8fd040;
+}
+
+.kbd-separator {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: #444;
+    align-self: center;
+}
+
+/* ─── Touche pixel (page règles) ─── */
+.key--lg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: #ddd;
+    text-shadow: 1px 1px 0 #111;
+    background-color: #4a4a4a;
+    box-shadow:
+        inset -2px -3px 0 0 #1a1a1a,
+        inset 2px 2px 0 0 #888,
+        0 0 0 2px #111;
+    cursor: default;
+    user-select: none;
+    transition: background-color 80ms, color 80ms, box-shadow 80ms, text-shadow 80ms;
+}
+
+.key--lg.key--active {
+    background-color: var(--c-accent-green);
+    color: #d0ff80;
+    text-shadow: 1px 1px 0 var(--c-accent-green-dark);
+    box-shadow:
+        inset -2px -3px 0 0 var(--c-accent-green-dark),
+        inset 2px 2px 0 0 var(--c-accent-green-light),
+        0 0 0 2px #111;
+}
+
+/* ─── Mini-maze 7×7 ─── */
+.mini-maze-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-maze-wrap__label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--c-gold);
+    letter-spacing: 1px;
+}
+
+.mini-maze {
+    padding: 2px;
+    background: #1a1a1a;
+    box-shadow:
+        inset 1px 1px 0 #0a0a0a,
+        inset -1px -1px 0 #333,
+        0 0 0 2px #0a0a0a;
+}
+
+.mini-maze__row {
+    display: flex;
+}
+
+.mini-maze__cell {
+    width: 18px;
+    height: 18px;
+    position: relative;
+}
+
+.mini-maze__cell--wall {
+    background: #2a2a2a;
+    box-shadow: inset 1px 1px 0 #1a1a1a;
+}
+
+.mini-maze__cell--path {
+    background: #3d2b1a;
+}
+
+.mini-maze__cell--player {
+    background: #55ddff;
+}
+
+.mini-maze__cell--player::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #aaeeff;
+    opacity: 0.6;
+}
+
+/* ─── Touches extra (Espace / Échap) ─── */
+.rules-extra-keys {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 2px solid #222;
+}
+
+.rules-extra-keys__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rules-extra-keys__key {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    background: #4a4a4a;
+    color: #ddd;
+    padding: 8px 12px;
+    text-shadow: 1px 1px 0 #111;
+    box-shadow:
+        inset -2px -3px 0 0 #1a1a1a,
+        inset 2px 2px 0 0 #888,
+        0 0 0 2px #111;
+    user-select: none;
+    transition: background-color 80ms, color 80ms, box-shadow 80ms, text-shadow 80ms;
+}
+
+.rules-extra-keys__key.key--active {
+    background-color: var(--c-accent-green);
+    color: #d0ff80;
+    text-shadow: 1px 1px 0 var(--c-accent-green-dark);
+    box-shadow:
+        inset -2px -3px 0 0 var(--c-accent-green-dark),
+        inset 2px 2px 0 0 var(--c-accent-green-light),
+        0 0 0 2px #111;
+}
+
+.rules-extra-keys__desc {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #666;
+}
+
+/* ─── Mode-card (Speedrun + VS IA) ─── */
+.mode-card {
+    background: #111;
+    box-shadow:
+        inset 1px 1px 0 #222,
+        inset -1px -1px 0 #000,
+        0 0 0 2px #0a0a0a;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.mode-card__icon {
+    flex-shrink: 0;
+    line-height: 0;
+}
+
+.mode-card__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.mode-card__title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+}
+
+.mode-card__title--speedrun {
+    color: var(--c-gold);
+    text-shadow: 1px 1px 0 #503800;
+}
+
+.mode-card__title--vs {
+    color: var(--c-ia-orange);
+    text-shadow: 1px 1px 0 var(--c-ia-orange-shadow);
+}
+
+.mode-card__desc {
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #888;
+    line-height: 2;
+}
+
+.mode-card__cta--green  { color: var(--c-algo-green); }
+.mode-card__cta--orange { color: var(--c-ia-orange); }
+
+/* ─── Algo-card ─── */
+.algo-intro {
+    margin: 0 0 4px 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #666;
+    line-height: 2;
+}
+
+.algo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.algo-card {
+    background: #1a1a1a;
+    box-shadow:
+        inset 1px 1px 0 #2a2a2a,
+        inset -1px -1px 0 #0a0a0a,
+        0 0 0 2px #111;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.algo-card__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.algo-card__name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+}
+
+.algo-card__name--dfs      { color: var(--c-algo-blue); }
+.algo-card__name--bfs      { color: var(--c-algo-green); }
+.algo-card__name--astar    { color: var(--c-gold); }
+.algo-card__name--dijkstra { color: var(--c-algo-purple); }
+
+.algo-card__badge {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    padding: 3px 6px;
+    letter-spacing: 0.5px;
+}
+
+.algo-card__badge--optimal {
+    background: #1a3a10;
+    color: var(--c-algo-green);
+    box-shadow: 0 0 0 1px #2a5a18;
+}
+
+.algo-card__badge--profond {
+    background: #2a1a00;
+    color: var(--c-gold);
+    box-shadow: 0 0 0 1px #5a4000;
+}
+
+.algo-card__desc {
+    margin: 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #666;
+    line-height: 1.9;
+    white-space: pre-line;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+    .logo__title { font-size: 32px; letter-spacing: 2px; }
+}
+
+@media (max-width: 680px) {
+    .rules-page {
+        padding: var(--s-4) var(--s-3);
+    }
+    .rules-header-title {
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+    .rules-tab-panels {
+        padding: 16px;
+    }
+    .rules-extra-keys {
+        gap: 8px;
+    }
+    .keyboard-diagram {
+        gap: 20px;
+    }
+    .kbd-separator {
+        display: none;
+    }
+    .algo-grid {
+        grid-template-columns: 1fr;
+    }
+    .mode-card {
+        padding: 14px;
+        gap: 14px;
+    }
+}
+
+@media (max-height: 700px) {
+    .logo__title { font-size: 36px; }
+    .logo { margin-bottom: var(--s-4); }
+
+    .rules-page { padding: var(--s-3) var(--s-5); }
+    .rules-header-title { font-size: 14px; margin-bottom: 12px; }
+    .rules-tab-panels { padding: 16px; }
+    .key--lg { width: 36px; height: 36px; font-size: 9px; }
+    .keyboard-diagram { gap: 24px; }
+}

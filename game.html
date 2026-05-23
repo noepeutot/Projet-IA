@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Runner — Jeu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body>
+    <header class="game-topbar">
+        <div class="topbar__left">
+            <a href="index.html" id="back-button" class="btn-mc btn-mc--sm back-link">
+                <span class="btn-mc__icon" aria-hidden="true">←</span>
+                Retour
+            </a>
+        </div>
+
+        <div class="topbar__center">
+            <p id="timer" class="timer-lcd">0:00:00</p>
+            <button id="restart-game" class="btn-mc btn-mc--sm btn-mc--icon restart-btn" aria-label="Recommencer la partie">
+                <span class="btn-mc__icon" aria-hidden="true">↻</span>
+            </button>
+        </div>
+
+        <div class="topbar__right">
+            <span id="mode-badge" class="mode-badge">Speedrun</span>
+        </div>
+    </header>
+
+    <div class="game-grid">
+        <aside id="menu" class="panel-mc game-panel game-panel--left">
+            <article class="panel-mc__section">
+                <h3 class="panel-mc__section-title">Labyrinthe</h3>
+
+                <label class="panel-mc__label" for="maze-size">Taille (5–30)</label>
+                <input class="input-mc" type="number" id="maze-size" value="15" min="5" max="30">
+
+                <label class="panel-mc__label" for="generation-type">Génération</label>
+                <select class="select-mc" id="generation-type">
+                    <option value="recursive">Recursive Backtracking</option>
+                    <option value="random">Aléatoire</option>
+                    <option value="prim">Prim's Algorithm</option>
+                    <option value="kruskal">Kruskal</option>
+                </select>
+
+                <button class="btn-mc btn-mc--block btn-mc--emerald" id="generate-maze">
+                    Nouveau labyrinthe
+                </button>
+            </article>
+
+            <article class="panel-mc__section">
+                <h3 class="panel-mc__section-title">Algorithme</h3>
+
+                <label class="panel-mc__label" for="algo-select">Recherche</label>
+                <select class="select-mc" id="algo-select">
+                    <option value="dfs">Depth First Search</option>
+                    <option value="bfs">Breadth First Search</option>
+                    <option value="aStar">A* (A-Star)</option>
+                    <option value="dijkstra">Dijkstra</option>
+                </select>
+
+                <button class="btn-mc btn-mc--block btn-mc--gold" id="apply-algo">
+                    Rechercher
+                </button>
+
+                <div class="algo-stats">
+                    <span class="panel-mc__label">Cellules explorées</span>
+                    <span class="algo-stats__value" id="explored-count">—</span>
+                    <span class="panel-mc__label">Longueur chemin</span>
+                    <span class="algo-stats__value" id="path-length">—</span>
+                </div>
+            </article>
+        </aside>
+
+        <main class="game-main">
+            <section id="maze-container" class="maze-frame"></section>
+            <p class="game-hint">
+                Flèches / ZQSD · déplacer &nbsp;·&nbsp; Espace · recommencer &nbsp;·&nbsp; Échap · pause
+            </p>
+        </main>
+
+        <aside id="ranking" class="panel-mc game-panel game-panel--right">
+            <article class="panel-mc__section">
+                <h3 class="panel-mc__section-title">Meilleurs Temps</h3>
+                <div id="best-times" class="best-times"></div>
+            </article>
+
+            <article class="panel-mc__section legend">
+                <h3 class="panel-mc__section-title">Légende</h3>
+                <ul class="legend__list">
+                    <li><span class="legend__swatch legend__swatch--player"></span>Joueur</li>
+                    <li><span class="legend__swatch legend__swatch--visited"></span>Exploré</li>
+                    <li><span class="legend__swatch legend__swatch--solution"></span>Chemin</li>
+                    <li><span class="legend__swatch legend__swatch--exit"></span>Sortie</li>
+                </ul>
+            </article>
+        </aside>
+
+        <aside id="difficulty-selector" class="panel-mc game-panel game-panel--right hidden">
+            <h3 class="panel-mc__section-title">Difficulté IA</h3>
+            <div class="difficulty-buttons">
+                <button class="difficulty-btn btn-mc btn-mc--block" data-difficulty="easy">Facile</button>
+                <button class="difficulty-btn btn-mc btn-mc--block" data-difficulty="medium">Moyen</button>
+                <button class="difficulty-btn btn-mc btn-mc--block" data-difficulty="hard">Difficile</button>
+            </div>
+        </aside>
+    </div>
+
+    <div id="success-message" class="success-message modal-mc hidden">
+        <div class="modal-mc__content success-content">
+            <h2 class="modal-mc__title">Félicitations !</h2>
+            <p id="success-time" class="modal-mc__text"></p>
+        </div>
+    </div>
+
+    <div id="defeat-message" class="defeat-message modal-mc hidden">
+        <div class="modal-mc__content defeat-content">
+            <h2 class="modal-mc__title modal-mc__title--danger">Défaite ...</h2>
+            <p class="modal-mc__text">Le creeper a gagné !</p>
+        </div>
+    </div>
+
+    <div id="no-path-message" class="error-message modal-mc hidden">
+        <div class="modal-mc__content error-content">
+            <h2 class="modal-mc__title modal-mc__title--warn">Aucun chemin trouvé</h2>
+            <p class="modal-mc__text">Veuillez générer un nouveau labyrinthe.</p>
+        </div>
+    </div>
+
+    <div id="size-error-message" class="error-message modal-mc hidden">
+        <div class="modal-mc__content error-content">
+            <h2 class="modal-mc__title modal-mc__title--warn">Taille invalide</h2>
+            <p class="modal-mc__text">La taille doit être comprise entre 5 et 30.</p>
+        </div>
+    </div>
+
+    <div id="pause-menu" class="pause-modal modal-mc hidden">
+        <div class="modal-mc__content pause-content">
+            <h2 class="modal-mc__title">Pause</h2>
+            <div class="pause-actions">
+                <button class="btn-mc btn-mc--block btn-mc--emerald" id="pause-resume">Reprendre</button>
+                <button class="btn-mc btn-mc--block" id="pause-restart">Recommencer la partie</button>
+                <button class="btn-mc btn-mc--block btn-mc--gold" id="pause-new">Nouveau labyrinthe</button>
+                <button class="btn-mc btn-mc--block" id="pause-home">Quitter</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/game.js"></script>
+</body>
+
+</html>

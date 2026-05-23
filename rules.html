@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Runner — Règles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="bg-pixel" aria-hidden="true">
+        <div class="bg-sky"></div>
+        <div class="bg-stars"></div>
+        <div class="bg-moon"></div>
+        <div class="bg-terrain-wrap">
+            <svg class="bg-terrain-far"></svg>
+            <svg class="bg-terrain-mid"></svg>
+            <svg class="bg-terrain-fg"></svg>
+        </div>
+        <div class="bg-overlay"></div>
+    </div>
+
+    <main class="rules-page">
+        <h1 class="rules-header-title">📖 GUIDE DU JOUEUR</h1>
+
+        <div class="rules-panel panel-mc">
+            <div class="rules-tabs" role="tablist" aria-label="Sections du guide">
+                <button id="tab-controls" class="rules-tab rules-tab--active" role="tab"
+                        aria-selected="true" aria-controls="panel-controls" tabindex="0">⌨ CONTRÔLES</button>
+                <button id="tab-modes" class="rules-tab" role="tab"
+                        aria-selected="false" aria-controls="panel-modes" tabindex="-1">⚔ MODES</button>
+                <button id="tab-algos" class="rules-tab" role="tab"
+                        aria-selected="false" aria-controls="panel-algos" tabindex="-1">⚙ ALGOS</button>
+            </div>
+
+            <div class="rules-tab-panels">
+                <!-- Onglet CONTRÔLES -->
+                <section id="panel-controls" class="rules-tab-panel rules-tab-panel--active"
+                         data-tab="controls" role="tabpanel" aria-labelledby="tab-controls" tabindex="0">
+                    <p class="rules-intro">
+                        Essaie les touches ci-dessous — l'aperçu réagit en direct.
+                        <br>
+                        <span class="rules-intro__note">Une case par appui · Pas de diagonale</span>
+                    </p>
+
+                    <div class="keyboard-diagram" aria-hidden="true">
+                        <!-- AZERTY -->
+                        <div class="kbd-group">
+                            <span class="kbd-group__label">CLAVIER AZERTY</span>
+                            <div class="kbd-row">
+                                <kbd class="key--lg" id="kbd-z">Z</kbd>
+                            </div>
+                            <div class="kbd-row">
+                                <kbd class="key--lg" id="kbd-q">Q</kbd>
+                                <kbd class="key--lg" id="kbd-s">S</kbd>
+                                <kbd class="key--lg" id="kbd-d">D</kbd>
+                            </div>
+                            <div class="kbd-hints">
+                                <span class="kbd-hint" id="hint-up-azerty">▲ Haut</span>
+                            </div>
+                        </div>
+
+                        <span class="kbd-separator">+</span>
+
+                        <!-- Flèches -->
+                        <div class="kbd-group">
+                            <span class="kbd-group__label">FLÈCHES</span>
+                            <div class="kbd-row">
+                                <kbd class="key--lg" id="kbd-up">▲</kbd>
+                            </div>
+                            <div class="kbd-row">
+                                <kbd class="key--lg" id="kbd-left">◄</kbd>
+                                <kbd class="key--lg" id="kbd-down">▼</kbd>
+                                <kbd class="key--lg" id="kbd-right">►</kbd>
+                            </div>
+                            <div class="kbd-hints">
+                                <span class="kbd-hint" id="hint-left">◄ Gauche</span>
+                                <span class="kbd-hint" id="hint-down">▼ Bas</span>
+                                <span class="kbd-hint" id="hint-right">► Droite</span>
+                            </div>
+                        </div>
+
+                        <!-- Aperçu mini-maze -->
+                        <div class="mini-maze-wrap">
+                            <span class="mini-maze-wrap__label">APERÇU</span>
+                            <div class="mini-maze" id="mini-maze"></div>
+                        </div>
+                    </div>
+
+                    <div class="rules-extra-keys">
+                        <div class="rules-extra-keys__item">
+                            <span class="rules-extra-keys__key" id="kbd-space">ESPACE</span>
+                            <span class="rules-extra-keys__desc">Recommencer</span>
+                        </div>
+                        <div class="rules-extra-keys__item">
+                            <span class="rules-extra-keys__key" id="kbd-escape">ÉCHAP</span>
+                            <span class="rules-extra-keys__desc">Menu principal</span>
+                        </div>
+                        <div class="rules-extra-keys__item">
+                            <span class="rules-extra-keys__key" id="kbd-r">R</span>
+                            <span class="rules-extra-keys__desc">Nouveau labyrinthe</span>
+                        </div>
+                        <div class="rules-extra-keys__item">
+                            <span class="rules-extra-keys__key" id="kbd-enter">ENTRÉE</span>
+                            <span class="rules-extra-keys__desc">Lancer la recherche</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Onglet MODES -->
+                <section id="panel-modes" class="rules-tab-panel"
+                         data-tab="modes" role="tabpanel" aria-labelledby="tab-modes" tabindex="0">
+                    <article class="mode-card">
+                        <div class="mode-card__icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48"
+                                 style="image-rendering:pixelated" aria-hidden="true">
+                                <rect x="16" y="4"  width="16" height="4"  fill="#888"/>
+                                <rect x="12" y="8"  width="24" height="4"  fill="#888"/>
+                                <rect x="8"  y="12" width="32" height="28" fill="#555"/>
+                                <rect x="12" y="16" width="24" height="20" fill="#222"/>
+                                <rect x="10" y="40" width="28" height="4"  fill="#555"/>
+                                <rect x="14" y="44" width="20" height="4"  fill="#888"/>
+                                <rect x="23" y="20" width="2"  height="8"  fill="#e0b030"/>
+                                <rect x="23" y="26" width="6"  height="2"  fill="#e0b030"/>
+                                <rect x="23" y="27" width="2"  height="2"  fill="#fff"/>
+                            </svg>
+                        </div>
+                        <div class="mode-card__body">
+                            <h3 class="mode-card__title mode-card__title--speedrun">⏱ SPEEDRUN</h3>
+                            <p class="mode-card__desc">
+                                Mode solo. Vous résolvez le labyrinthe<br>
+                                le plus vite possible. Votre temps est<br>
+                                enregistré dans le classement local.<br>
+                                <span class="mode-card__cta--green">→ Battez votre meilleur score !</span>
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="mode-card">
+                        <div class="mode-card__icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48"
+                                 style="image-rendering:pixelated" aria-hidden="true">
+                                <rect x="4"  y="8"  width="16" height="16" fill="#55ddff"/>
+                                <rect x="6"  y="10" width="6"  height="6"  fill="#aaeeff" opacity="0.7"/>
+                                <rect x="4"  y="24" width="16" height="20" fill="#3a8aaa"/>
+                                <rect x="21" y="20" width="6"  height="2"  fill="#aaa"/>
+                                <rect x="22" y="14" width="4"  height="6"  fill="#ddd"/>
+                                <rect x="22" y="22" width="4"  height="10" fill="#888"/>
+                                <rect x="28" y="8"  width="16" height="16" fill="#ff6a30"/>
+                                <rect x="30" y="10" width="6"  height="6"  fill="#ffaa80" opacity="0.7"/>
+                                <rect x="28" y="24" width="16" height="20" fill="#aa3a10"/>
+                            </svg>
+                        </div>
+                        <div class="mode-card__body">
+                            <h3 class="mode-card__title mode-card__title--vs">⚔ JOUEUR VS IA</h3>
+                            <p class="mode-card__desc">
+                                Affrontez un algorithme en temps réel.<br>
+                                L'IA résout pendant que vous jouez.<br>
+                                Qui sortira du labyrinthe en premier ?<br>
+                                <span class="mode-card__cta--orange">→ Battez la machine !</span>
+                            </p>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Onglet ALGOS -->
+                <section id="panel-algos" class="rules-tab-panel"
+                         data-tab="algos" role="tabpanel" aria-labelledby="tab-algos" tabindex="0">
+                    <p class="algo-intro">
+                        Quatre algorithmes de recherche disponibles :<br>
+                        observez leur comportement en temps réel sur le labyrinthe.
+                    </p>
+                    <div class="algo-grid">
+                        <div class="algo-card">
+                            <div class="algo-card__header">
+                                <span class="algo-card__name algo-card__name--dfs">DFS</span>
+                                <span class="algo-card__badge algo-card__badge--profond">PROFOND</span>
+                            </div>
+                            <p class="algo-card__desc">Depth First Search.
+Explore en profondeur.
+Rapide mais chemin
+non optimal.</p>
+                        </div>
+                        <div class="algo-card">
+                            <div class="algo-card__header">
+                                <span class="algo-card__name algo-card__name--bfs">BFS</span>
+                                <span class="algo-card__badge algo-card__badge--optimal">OPTIMAL</span>
+                            </div>
+                            <p class="algo-card__desc">Breadth First Search.
+Explore en largeur.
+Garantit le plus court
+chemin.</p>
+                        </div>
+                        <div class="algo-card">
+                            <div class="algo-card__header">
+                                <span class="algo-card__name algo-card__name--astar">A*</span>
+                                <span class="algo-card__badge algo-card__badge--optimal">OPTIMAL</span>
+                            </div>
+                            <p class="algo-card__desc">Heuristique. Combine
+distance parcourue
+et distance estimée.
+Très efficace.</p>
+                        </div>
+                        <div class="algo-card">
+                            <div class="algo-card__header">
+                                <span class="algo-card__name algo-card__name--dijkstra">DIJKSTRA</span>
+                                <span class="algo-card__badge algo-card__badge--optimal">OPTIMAL</span>
+                            </div>
+                            <p class="algo-card__desc">Explore par coût
+croissant. Optimal
+sans heuristique.
+Plus lent que A*.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="rules-panel-footer">
+                <a href="index.html" class="btn-mc rules-back-btn" id="rules-back-btn">
+                    <span class="btn-mc__icon" aria-hidden="true">←</span>
+                    RETOUR
+                </a>
+                <span class="rules-panel-footer__tag">MIASHS · Projet IA · 2026</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/landscape.js"></script>
+    <script src="js/rules.js"></script>
+</body>
+
+</html>
